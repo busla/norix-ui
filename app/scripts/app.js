@@ -13,8 +13,6 @@ var AttendanceMenuItem = React.createClass({
   },
 
   render: function() {
-    //console.log('CHECKED:', this.state.checked);
-    //console.log(this.props.player.player_name + ' ATTENDED = ' + this.props.player.attended);
 
     var niceDate = moment(this.props.attendance.date).format('DD. MMMM - HH:mm');    
     return (
@@ -37,11 +35,9 @@ var AttendanceMenu = React.createClass({
   render: function() {
     var rows = [];
     this.props.attendance.forEach(function(attendance, index) {
-    //for (var i = 0; i < this.props.attendance.length; i++) {
-      //console.log(attendance.date);
+
       rows.push(
         <AttendanceMenuItem 
-          //handleClick={this.handleChangeAttendance}
           attendance={attendance} 
           key={index}
           handleChangeAttendance={this.handleChangeAttendance}/>)
@@ -66,42 +62,14 @@ var AttendanceMenu = React.createClass({
 });
 
 var PlayerDetail = React.createClass({
-  
-  /*
-  componentDidMount: function() {
-    this.setState({attended: this.props.attended});
-  },
-  */
-  handleAttendance: function(ssn) {
-    //console.log(index);
-    //console.log('index, attended', index, attended);
-    /*
-   var nextState = {
-          ssn: this.state.player.ssn,
-          attended: (this.state.player.ssn === ssn ? !this.state.player.attended : this.state.player.attended)
-      };
 
+  handlePlayerAttended: function(ssn) {
 
-    this.setState({player: nextState});
-    console.log('this.state.player: ', this.state.player);
-    */    
-    //var newAttended = !this.state.attended;
-    //this.setState({attended: newAttended});
-    //var changedPlayer = {ssn: this.props.player.ssn, attended: newAttended};
-    this.props.handleAttendance(ssn);
+    this.props.handlePlayerAttended(ssn);
 
-    //this.setState({player[attended]});
   },
 
-  render: function() {
-    //console.log('this.state.attended: ', this.state.attended);
-    console.log('this.props.attended: ', this.props.attended);
-    //console.log(this.props.player);
-  //console.log('ATTENDED detail:', this.state.attended);
-    //console.log(this.state.checked);
-    //console.log(this.props.attended);    
-    //console.log(this.state.data[this.state.currentSeminar]);
-    //console.log(this.props.player.player_name + ' ATTENDED: ' + this.props.player.attended);
+  render: function() {    
     
     return (
         
@@ -113,8 +81,7 @@ var PlayerDetail = React.createClass({
               disabled={this.props.attendance ? false:true}
               checked={this.props.attended}
               value="value"
-              //defaultChecked={this.props.attendance ? false:true} 
-              onChange={this.handleAttendance} />
+              onChange={this.handlePlayerAttended} />
           </label>
         </td>
         <td>                                      
@@ -138,49 +105,25 @@ var PlayerList = React.createClass({
     this.setState({ date: date });    
   },
 
-  handleSave: function() {
-    this.props.handleSave();
+  handleSaveAttendance: function() {
+    this.props.handleSaveAttendance();
   },
   
   handleAdd: function(currentAttendance) {
     this.props.handleAdd(currentAttendance);
   },
 
-  handleAttendance: function(ssn) {
-
-    console.log('ssn: ', ssn);
-    this.props.handleAttendance(ssn);
-
-    /*
-
-    this.state.attendance.attended.forEach(function(player, index) {
-      
-      if (player.ssn == ssn) {
-        newAttended.push({ssn: ssn, attended: !(player.attended === 'true')});
-      }
-
-      else {
-        newAttended.push({ssn: ssn, attended: player.attended});
-      }
-    });
-
-    attendance.attended = newAttended;
-
-    this.setState({attendance: attendance});
-    */
+  handlePlayerAttended: function(ssn) {
+    this.props.handlePlayerAttended(ssn);
   },
 
   addAttendance: function() {
-    //console.log(this.state.data[this.state.currentSeminar].players);
     var seminars = [];
     var attendance = {};
     var players = [];
     var temp = [];
-    //console.log(moment().toISOString());
-    //console.log(this.props.seminar.players);
 
     attendance.date = this.state.date;
-    //attendance.seminar = this.props.seminar.seminar_id
 
     this.props.players.forEach(function(player, index) {      
       players.push(
@@ -191,28 +134,20 @@ var PlayerList = React.createClass({
     });
     
     
-    console.log('attendance.date: ', attendance.date);
-    console.log('this.state.date: ', this.state.date);
     attendance.attended = players;
     var url = 'http://localhost:1337/seminar/'+this.props.seminar.seminar_id+'/attendance';
 
     $.ajax({
       url: url,
-      dataType: 'json',
-      //contentType: 'application/json',
+      dataType: 'json',  
       method: 'POST',
       async: true,
-      //processData: false,
       data: attendance,
 
       success: function(data) {
-        //console.log('SUCCESS: ', data);   
         
         if (this.isMounted()) {
-          //console.log('RESPONSE:', data);          
-          //console.log('ATTENDANCE:', data.attendance.length -1);
           var lastItem = (data.attendance.length - 1);
-          //console.log('ATTENDANCE:', lastItem.id);
           this.handleAdd(data.attendance[lastItem].id);
         }
         
@@ -224,29 +159,16 @@ var PlayerList = React.createClass({
     
   },
   saveAttendance: function() {
- 
-    //console.log(moment().toISOString());
-    //console.log(this.props.seminar.players);
-    //attendance.date = this.props.date;
 
     $.ajax({
       url: 'http://localhost:1337/attendance/'+this.props.attendance.id,
       dataType: 'json', 
-      //contentType: 'application/json',
       method: 'PUT',
       async: true,
-      //processData: false,
       data: this.props.attendance,
 
       success: function(data) {
-        console.log('SUCCESS: ', data);   
-        /*
-        if (this.isMounted()) {
-          //console.log('CURRENT:', this.props.seminar);
-          this.handleSave();         
-        }
-        */
-        
+        this.handleSaveAttendance();
       }.bind(this),
       error: function(xhr, status, err) {
         console.error("http://localhost:1337/attendance", status, err.toString());
@@ -255,65 +177,39 @@ var PlayerList = React.createClass({
     
   },
 
-
-  /*
-  handleAttended: function(player) {
-    this.setState({attended: player});
-  },
-  */
   render: function() {
 
     var players = [];  
 
     if (this.props.attendance) {
-      //console.log('currentAttendance: ',currentAttendance);
       
       var info = 'Fann enga mætingu';
-      console.log('this.props.attendance.date: ', this.props.attendance.date);
-      console.log('this.props.attendance: ', this.props.attendance);
       this.props.players.forEach(function(player) {
         this.props.attendance.attended.filter(function(a){
           
           if (a.ssn == player.ssn) {
-            //console.log(a.attended);
-            //var attended = (a.attended === 'true');
-            //console.log('attended: ', attended);
-            //playersAttended.push({ssn: player.ssn, attended: (a.attended === 'true')});
             players.push(
               <PlayerDetail 
-                //handleAttended={this.handleAttended} 
-                //disabled={false}
                 date={this.props.date}
-                //currentAttendance={this.props.currentAttendance}
-                //attended={attended}
-                //readOnly={false} 
                 attendance={this.props.attendance}
                 attended={a.attended}
                 player={player} 
                 key={player.ssn}
-                handleAttendance={this.handleAttendance.bind(this, player.ssn)} />);            
+                handlePlayerAttended={this.handlePlayerAttended.bind(this, player.ssn)} />);            
           }           
         }.bind(this));
       }.bind(this));
-      //console.log('players: ', players);
     }                
 
     else {
-      //console.log('this.props.currentAttendance: ', this.props.currentAttendance);
       this.props.players.forEach(function(player) {
-        //console.log('player: ', player.ssn, player.attended);
         players.push(
           <PlayerDetail 
-            //handleAttended={this.handleAttended} 
-            //disabled={false}
             date={this.props.date}
-            //currentAttendance={this.props.currentAttendance}
-            //readOnly={false} 
-            //attended={player.attended}
             attendance={this.props.attendance}
             player={player} 
             key={player.ssn}
-            handleAttendance={this.handleAttendance.bind(this, player.ssn)} />);
+            handlePlayerAttended={this.handlePlayerAttended.bind(this, player.ssn)} />);
       }.bind(this)); 
     };
 
@@ -357,36 +253,30 @@ var PlayerList = React.createClass({
 var Attendance = React.createClass({
   getInitialState: function() {
     return {
-      //attendance: attendance,
       date: moment().format('YYYY-MM-DDTHH:mm:ss.SSS')
 
     }
   },
 
-  handleSave: function() {
-    this.props.handleSave();
+  handleSaveAttendance: function() {
+    this.props.handleSaveAttendance();
   },
   
   handleAdd: function(currentAttendance) {
     this.props.handleAdd(currentAttendance);
   },
   
-  handleAttendance: function(ssn) {
-    console.log('ssn: ', ssn)
-    this.props.handleAttendance(ssn);
+  handlePlayerAttended: function(ssn) {
+    this.props.handlePlayerAttended(ssn);
   },
 
   addAttendance: function() {
-    //console.log(this.state.data[this.state.currentSeminar].players);
     var seminars = [];
     var attendance = {};
     var players = [];
     var temp = [];
-    //console.log(moment().toISOString());
-    //console.log(this.props.seminar.players);
 
     attendance.date = this.state.date;
-    //attendance.seminar = this.props.seminar.seminar_id
 
     this.props.seminar.players.forEach(function(player, index) {      
       players.push(
@@ -396,29 +286,20 @@ var Attendance = React.createClass({
         });
     });
     
-    
-    console.log('attendance.date: ', attendance.date);
-    console.log('this.state.date: ', this.state.date);
     attendance.attended = players;
     var url = 'http://localhost:1337/seminar/'+this.props.seminar.seminar_id+'/attendance';
 
     $.ajax({
       url: url,
-      dataType: 'json',
-      //contentType: 'application/json',
+      dataType: 'json',  
       method: 'POST',
       async: true,
-      //processData: false,
       data: attendance,
 
       success: function(data) {
-        //console.log('SUCCESS: ', data);   
         
         if (this.isMounted()) {
-          console.log('RESPONSE:', data.attendance);          
-          console.log('ATTENDANCE:', data.attendance.length -1);
           var lastItem = (data.attendance.length - 1);
-          //console.log('ATTENDANCE:', lastItem.id);
           this.handleAdd(data.attendance[lastItem].id);
         }
         
@@ -430,29 +311,10 @@ var Attendance = React.createClass({
     
   },
 
-  /*
-  handleAttended: function(player) {
-    this.setState({attended: player});
-  },
-  */
   render: function() {
     var info = 'Fann enga mætingu';
-    //var attendance = {};
-    //console.log(this.props.currentAttendance);
-    //var players = [];
-    //var allPlayers = this.props.seminar.players;
-    var attendance = this.props.currentAttendance;
 
-    //console.log('this.props.currentAttendance: ', this.props.currentAttendance);
-
-
-    if (attendance) {
-      attendance = _.findWhere(this.props.seminar.attendance, {id: this.props.currentAttendance});      
-    }
-
-    console.log('attendance: ', attendance); 
-    //console.log('this.props.seminar.players: ', this.props.seminar.players);
-    
+    var attendanceDate = (this.props.currentAttendance ? moment(this.props.attendance.date).format('YYYY-MM-DDTHH:mm:ss.SSS'):this.state.date);    
 
     return (  
         <div className="row">
@@ -467,13 +329,12 @@ var Attendance = React.createClass({
                     onChange={this.changeDate} 
                     
                     format="YYYY-MM-DDTHH:mm:ss.SSS"
-                    dateTime={this.state.date} />
+                    dateTime={attendanceDate} />
                 </fieldset>
               </div>
               <div className="col-xs-12 col-md-3">
                 <button 
-                  type="button" 
-                  disabled={this.props.currentAttendance ? true:false}
+                  type="button"                 
                   className="btn btn-primary btn-md btn-block" 
                   onClick={this.addAttendance}>Ný mæting</button>
               </div>
@@ -481,12 +342,13 @@ var Attendance = React.createClass({
             <div className="row">
               <div className="col-xs-12">                               
                 <PlayerList
+                  handleSaveAttendance={this.handleSaveAttendance}
                   handleAdd={this.handleAdd}
                   date={this.state.date}
                   players={this.props.seminar.players}
                   seminar={this.props.seminar.seminar_id}
-                  handleAttendance={this.handleAttendance}                 
-                  attendance={attendance}/>                
+                  handlePlayerAttended={this.handlePlayerAttended}                 
+                  attendance={this.props.attendance}/>                
               </div>
             </div>                  
           </div>
@@ -574,8 +436,7 @@ var App = React.createClass({
           success: function(data) {
             if (this.isMounted()) {
               data.forEach(function(seminar) {
-                seminar.attendance.forEach(function(attendance) {
-                  //console.log(attendance);
+                seminar.attendance.forEach(function(attendance) {            
                   attendance.attended.forEach(function(attended) {                    
                     attended.attended = (attended.attended === 'true');
                   });
@@ -597,28 +458,20 @@ var App = React.createClass({
   },
 
   componentDidMount: function() {    
-    this.getSeminars();
-    console.log('Mounting App....');
-    
+    this.getSeminars();    
   },
   
 
-  handleAttendance: function(ssn) {
-    console.log('ssn: ', ssn);
+  handlePlayerAttended: function(ssn) {
 
-    var previous = this;
-
-    _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {
-      //console.log(attendance);
+    _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
       _.each(attendance.attended, function(player) {
           if (player.ssn == ssn) {
-            //console.log(player);
             player.attended = !player.attended;  
           }        
       });
     });
 
-    console.log(this.state.data[this.state.currentSeminar].attendance);
     this.setState({data: this.state.data});
   },
    
@@ -636,15 +489,19 @@ var App = React.createClass({
   },
 
   render: function(){
-    //console.log('EVENT DATE: ', this.state.date);
     var info = 'Sæki gögn.....'
-    //console.log('Current seminar: ', this.state.currentSeminar)
-    console.log('this.state.currentAttendance: ', this.state.currentAttendance);
-    console.log('this.state.currentSeminar: ', this.state.currentSeminar);
+    
     if (this.state.data.length === 0) {
       return ( <Waiting info={info}/> );
     }
     else {
+    var attendance = this.state.currentAttendance;
+    
+    if (attendance) {
+      attendance = _.findWhere(this.state.data[this.state.currentSeminar].attendance, {id: this.state.currentAttendance});      
+      
+    }
+
       return(
         <div>
           <div className="col-xs-12 col-md-9">
@@ -659,9 +516,11 @@ var App = React.createClass({
             <div className="row">
               <div className="col-xs-12">
                 <Attendance 
-                  handleAdd={this.handleAdd}                  
+                  handleSaveAttendance={this.getSeminars}
+                  handleAdd={this.handleAdd} 
+                  attendance={attendance}                 
                   seminar={this.state.data[this.state.currentSeminar]}
-                  handleAttendance={this.handleAttendance} 
+                  handlePlayerAttended={this.handlePlayerAttended} 
                   currentAttendance={this.state.currentAttendance}/>
               </div>
             </div>         
@@ -679,4 +538,3 @@ var App = React.createClass({
 
 
 React.render(<App url="http://localhost:1337/seminar" />, document.getElementById('app') );
-//React.render(<DateTimeField />, document.getElementById('demo') );

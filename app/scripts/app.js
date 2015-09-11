@@ -88,10 +88,10 @@ var PlayerDetail = React.createClass({
           {this.props.player.player_name}                 
         </td>
         <td>                                      
-          {this.props.player.email}                 
+          {this.props.player.phone}                 
         </td>
         <td>                                      
-          {this.props.date}
+          {this.props.player.email}
         </td>        
       </tr>            
              
@@ -100,10 +100,6 @@ var PlayerDetail = React.createClass({
 });
 
 var PlayerList = React.createClass({
-
-  changeDate: function(date) {    
-    this.setState({ date: date });    
-  },
 
   handleSaveAttendance: function() {
     this.props.handleSaveAttendance();
@@ -117,47 +113,7 @@ var PlayerList = React.createClass({
     this.props.handlePlayerAttended(ssn);
   },
 
-  addAttendance: function() {
-    var seminars = [];
-    var attendance = {};
-    var players = [];
-    var temp = [];
 
-    attendance.date = this.state.date;
-
-    this.props.players.forEach(function(player, index) {      
-      players.push(
-        {
-          ssn: player.ssn,
-          attended: true
-        });
-    });
-    
-    
-    attendance.attended = players;
-    var url = 'http://localhost:1337/seminar/'+this.props.seminar.seminar_id+'/attendance';
-
-    $.ajax({
-      url: url,
-      dataType: 'json',  
-      method: 'POST',
-      async: true,
-      data: attendance,
-
-      success: function(data) {
-        
-        if (this.isMounted()) {
-          var lastItem = (data.attendance.length - 1);
-          this.handleAdd(data.attendance[lastItem].id);
-        }
-        
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(url, status, err.toString());
-      }.bind(this)
-    });  
-    
-  },
   saveAttendance: function() {
 
     $.ajax({
@@ -182,7 +138,7 @@ var PlayerList = React.createClass({
     var players = [];  
 
     if (this.props.attendance) {
-      
+      console.log(this.props.attendance);
       var info = 'Fann enga mætingu';
       this.props.players.forEach(function(player) {
         this.props.attendance.attended.filter(function(a){
@@ -258,6 +214,16 @@ var Attendance = React.createClass({
     }
   },
 
+
+  changeDate: function(currentAttendance, newDate) {    
+    //this.setState({ date: newDate }); 
+    
+    console.log('newDate: ', newDate);
+    console.log('currentAttendance: ', currentAttendance);
+
+    this.props.changeDate(newDate, currentAttendance);
+  },
+
   handleSaveAttendance: function() {
     this.props.handleSaveAttendance();
   },
@@ -311,10 +277,16 @@ var Attendance = React.createClass({
     
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.currentAttendance) {
+
+      this.setState({date: moment(nextProps.attendance.date).format('YYYY-MM-DDTHH:mm:ss.SSS')});
+    }
+  },
+
   render: function() {
     var info = 'Fann enga mætingu';
-
-    var attendanceDate = (this.props.currentAttendance ? moment(this.props.attendance.date).format('YYYY-MM-DDTHH:mm:ss.SSS'):this.state.date);    
+    console.log(this.state.date);
 
     return (  
         <div className="row">
@@ -326,10 +298,10 @@ var Attendance = React.createClass({
                   <DateTimeField 
                                  
                     inputFormat='D. MMM - h:mm' 
-                    onChange={this.changeDate} 
+                    onChange={this.changeDate.bind(this, this.props.currentAttendance)} 
                     
                     format="YYYY-MM-DDTHH:mm:ss.SSS"
-                    dateTime={attendanceDate} />
+                    dateTime={this.state.date} />
                 </fieldset>
               </div>
               <div className="col-xs-12 col-md-3">
@@ -475,6 +447,19 @@ var App = React.createClass({
     this.setState({data: this.state.data});
   },
    
+  changeDate: function(newDate, currentAttendance) {
+    console.log('newDate: ', newDate);
+    console.log('currentAttendance: ', currentAttendance);
+    _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
+      if (attendance.id == currentAttendance) {
+        attendance.date = newDate;          
+      }              
+    });
+    
+
+    this.setState({data: this.state.data});
+  },
+
   handleAdd: function(currentAttendance) {
     this.getSeminars(currentAttendance);    
   },
@@ -487,6 +472,7 @@ var App = React.createClass({
   handleChangeAttendance: function(aid) {
     this.setState({ currentAttendance: aid });
   },
+
 
   render: function(){
     var info = 'Sæki gögn.....'
@@ -516,6 +502,7 @@ var App = React.createClass({
             <div className="row">
               <div className="col-xs-12">
                 <Attendance 
+                  changeDate={this.changeDate}
                   handleSaveAttendance={this.getSeminars}
                   handleAdd={this.handleAdd} 
                   attendance={attendance}                 

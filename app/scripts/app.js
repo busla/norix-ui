@@ -5,6 +5,64 @@ var DateTimeField= require('react-bootstrap-datetimepicker');
 var moment = require('moment');
 var _ = require('underscore');
 
+var NoriLogin = React.createClass({
+  scrapeNori: function(e) {
+    e.preventDefault();
+
+    var urls = {
+        noriUrl: 'http://'+this.refs.club.getDOMNode().value+'.felog.is/UsersLogin.aspx',
+        scrapyUrl: 'http://127.0.0.1:9080/crawl.json'
+    };
+
+    var payload = {      
+      request: {
+        url: urls.noriUrl, 
+        meta: {
+          user: this.refs.user.getDOMNode().value, 
+          password: this.refs.password.getDOMNode().value
+        },
+      },
+      spider_name:"norix", 
+    };
+
+    console.log(payload);
+
+    $.ajax({      
+          url: urls.scrapyUrl,
+          dataType: 'json',  
+          method: 'POST',
+          async: true,                        
+          data: JSON.stringify(payload),
+          success: function(data) {
+            console.log(data)
+          }.bind(this),
+
+          error: function(xhr, status, err) {
+            console.error(urls.scrapyUrl, status, err.toString());
+          }.bind(this)          
+        });
+
+  },
+
+  render: function() {
+    return (
+      <form className="navbar-form navbar-right" role="login">
+          <div className="form-group">
+              <input type="text" className="form-control" ref="club" placeholder="félag" />
+          </div>
+          <div className="form-group">
+              <input type="text" className="form-control" ref="user" placeholder="notandanafn" />
+          </div>
+          <div className="form-group">
+              <input type="text" className="form-control" ref="password" placeholder="lykilorð" />
+          </div>                
+          <button className="btn btn-success" onClick={this.scrapeNori}>Sækja iðkendur</button>
+      </form>
+
+    );
+  }
+});
+
 var AttendanceMenuItem = React.createClass({
 
   handleChangeAttendance: function(e){
@@ -213,7 +271,6 @@ var Attendance = React.createClass({
 
     }
   },
-
 
   changeDate: function(currentAttendance, newDate) {    
     //this.setState({ date: newDate }); 
@@ -524,4 +581,5 @@ var App = React.createClass({
 });
 
 
+React.render(<NoriLogin />, document.getElementById('login') );
 React.render(<App url="http://localhost:1337/seminar" />, document.getElementById('app') );

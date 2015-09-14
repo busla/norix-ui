@@ -17,9 +17,9 @@ var Main = React.createClass({
         currentAttendance: null        
     };
   },
-
+  
   getSeminars: function(currentAttendance) {
-    
+
     $.ajax({      
           url: this.props.url,
           cache: true,
@@ -99,7 +99,7 @@ var Main = React.createClass({
     var info = 'Sæki gögn.....'
     
     if (this.state.data.length === 0) {
-      return ( <Waiting info={info}/> );
+      return null;
     }
     else {
     var attendance = this.state.currentAttendance;
@@ -108,7 +108,6 @@ var Main = React.createClass({
       attendance = _.findWhere(this.state.data[this.state.currentSeminar].attendance, {id: this.state.currentAttendance});      
       
     }
-
       return(
         <div>
           <div className="col-xs-12 col-md-9">

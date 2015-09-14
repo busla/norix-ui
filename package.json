@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "moment": "^2.10.6",
+    "react-bootstrap": "^0.25.2",
     "react-bootstrap-datetimepicker": "0.0.20",
     "underscore": "^1.8.3"
   },

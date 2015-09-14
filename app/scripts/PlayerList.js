@@ -43,8 +43,7 @@ var PlayerList = React.createClass({
 
     var players = [];  
 
-    if (this.props.attendance) {
-      console.log(this.props.attendance);
+    if (this.props.attendance) {      
       var info = 'Fann enga mætingu';
       this.props.players.forEach(function(player) {
         this.props.attendance.attended.filter(function(a){

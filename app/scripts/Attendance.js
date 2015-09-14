@@ -13,11 +13,6 @@ var Attendance = React.createClass({
   },
 
   changeDate: function(currentAttendance, newDate) {    
-    //this.setState({ date: newDate }); 
-    
-    console.log('newDate: ', newDate);
-    console.log('currentAttendance: ', currentAttendance);
-
     this.props.changeDate(newDate, currentAttendance);
   },
 
@@ -86,7 +81,6 @@ var Attendance = React.createClass({
 
   render: function() {
     var info = 'Fann enga mætingu';
-    console.log(this.state.date);
 
     return (  
         <div className="row">

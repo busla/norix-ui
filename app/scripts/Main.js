@@ -54,7 +54,10 @@ var Main = React.createClass({
     this.getSeminars();    
   },
   
-
+  componentWillReceiveProps: function(nextProps) {
+    this.getSeminars();
+  },
+  
   handlePlayerAttended: function(ssn) {
 
     _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
@@ -68,9 +71,7 @@ var Main = React.createClass({
     this.setState({data: this.state.data});
   },
    
-  changeDate: function(newDate, currentAttendance) {
-    console.log('newDate: ', newDate);
-    console.log('currentAttendance: ', currentAttendance);
+  changeDate: function(newDate, currentAttendance) {    
     _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
       if (attendance.id == currentAttendance) {
         attendance.date = newDate;          

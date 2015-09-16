@@ -55,7 +55,7 @@ var NoriLogin = React.createClass({
       if (!('err' in data)) {
         localStorage.token = data.token;
         localStorage.username = data.user.username;
-        this.setState({ isAuthenticated: true }); 
+        this.setState({ isAuthenticated: true, loading: false }); 
         React.render(<Main url={apiUrl} />, document.getElementById('main') );       
       }
       
@@ -66,7 +66,7 @@ var NoriLogin = React.createClass({
 
   logIn: function(e) {
     e.preventDefault();
-
+    this.setState({loading: true});  
     var loginUrl = 'http://localhost:1337/login';
     var apiUrl = 'http://localhost:1337/seminar';
     var payload = {      
@@ -79,10 +79,9 @@ var NoriLogin = React.createClass({
     
   },
   
-  sync: function(e) {
-    console.log(this.state.loading);
-    this.setState({loading: true});
+  sync: function(e) {    
     e.preventDefault();
+    this.setState({loading: true});
     NoriLogin.authenticate('http://localhost:1337/sync', localStorage.token, function(results) {      
       if (!('err' in results)) {   
           console.log(results)           
@@ -154,7 +153,13 @@ var NoriLogin = React.createClass({
             <Input ref="club" type='text' placeholder='félag' />{' '}
             <Input ref="user" type='text' placeholder='notandanafn' />{' '}
             <Input ref="password" type='password' placeholder='lykilorð' />{' '}
-            <Button onClick={this.logIn} bsStyle='success' type="submit">Áfram <Glyphicon glyph="log-in"/></Button>
+            <Button 
+              onClick={this.logIn} 
+              bsStyle='success' 
+              type="submit"
+              disabled={this.state.loading ? true:false}>
+              <Glyphicon glyph={this.state.loading ? "glyphicon glyphicon-refresh glyphicon-refresh-animate":"log-in"}/> Innskrá
+            </Button>
           </form>
         
       );

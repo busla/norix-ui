@@ -23,7 +23,7 @@ var AttendanceMenu = React.createClass({
         <table className="table table-striped">
           <thead>
             <tr>                
-              <th>Dagsetning</th>
+              <th>Eldri mætingarlistar</th>
             </tr>
           </thead>
           <tbody>

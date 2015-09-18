@@ -97,10 +97,10 @@ var PlayerList = React.createClass({
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-12">             
+            <div className="col-xs-12 text-center">             
               <button 
-                type="button" 
-                className="btn btn-success btn-lg btn-block"
+                type="button"                
+                className="btn btn-success btn-lg btn-save-attendance"
                 disabled={this.props.attendance ? false:true} 
                 onClick={this.saveAttendance}>Vista</button>            
             </div>

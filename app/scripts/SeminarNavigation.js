@@ -24,7 +24,7 @@ var SeminarNavigation = React.createClass({
    
   
     return (
-        <ul className="nav nav-tabs">{seminars}</ul>      
+        <ul className="nav nav-pills">{seminars}</ul>        
     );
   }
 });

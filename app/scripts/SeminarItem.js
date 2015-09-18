@@ -7,7 +7,7 @@ var SeminarItem = React.createClass({
     },
 
     render: function() {
-        var name = this.props.seminar.age_group;
+        var name = this.props.seminar.age_group.substring(0, 15);
         var players = this.props.seminar.players;
 
         return (

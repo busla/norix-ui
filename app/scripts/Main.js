@@ -6,6 +6,20 @@ var Attendance = require('./Attendance');
 var AttendanceMenu = require('./AttendanceMenu');
 var _ = require('underscore');
 
+var ReactBootstrap = require('react-bootstrap'),
+    Nav = ReactBootstrap.Nav,
+    NavItem = ReactBootstrap.NavItem,
+    Navbar = ReactBootstrap.Navbar,
+    MenuItem = ReactBootstrap.MenuItem,
+    NavDropdown = ReactBootstrap.NavDropdown,
+    Glyphicon = ReactBootstrap.Glyphicon,
+    Button = ReactBootstrap.Button,
+    ButtonToolbar = ReactBootstrap.ButtonToolbar,
+    ButtonGroup = ReactBootstrap.ButtonGroup,
+    Input = ReactBootstrap.Input,
+    Col = ReactBootstrap.Col,
+    Row = ReactBootstrap.Row;
+
 var Main = React.createClass({
 
   getInitialState: function () { 
@@ -110,34 +124,36 @@ var Main = React.createClass({
       
     }
       return(
-        <div>
-          <div className="col-xs-12 col-md-9">
-            <div className="row">
-              <div className="col-xs-12">            
-                <SeminarNavigation
-                  currentSeminar={this.state.currentSeminar}
-                  seminarList={this.state.data}
-                  changeSeminar={this.changeSeminar} />
-              </div>
-            </div>                      
-            <div className="row">
-              <div className="col-xs-12">
-                <Attendance 
-                  changeDate={this.changeDate}
-                  handleSaveAttendance={this.getSeminars}
-                  handleAdd={this.handleAdd} 
-                  attendance={attendance}                 
-                  seminar={this.state.data[this.state.currentSeminar]}
-                  handlePlayerAttended={this.handlePlayerAttended} 
-                  currentAttendance={this.state.currentAttendance}/>
-              </div>
-            </div>         
-          </div>
-          <div className="col-xs-12 col-md-3" >
-            <AttendanceMenu 
-              attendance={this.state.data[this.state.currentSeminar].attendance}
-              handleChangeAttendance={this.handleChangeAttendance} />
-          </div>
+        <div className="container">
+          <Row>
+            <Col xs={12} md={9}>            
+              <Row>
+                <Col xs={12}>
+                  <SeminarNavigation
+                    currentSeminar={this.state.currentSeminar}
+                    seminarList={this.state.data}
+                    changeSeminar={this.changeSeminar} />
+                </Col>
+              </Row>                      
+              <Row>
+                <Col xs={12}>
+                  <Attendance 
+                    changeDate={this.changeDate}
+                    handleSaveAttendance={this.getSeminars}
+                    handleAdd={this.handleAdd} 
+                    attendance={attendance}                 
+                    seminar={this.state.data[this.state.currentSeminar]}
+                    handlePlayerAttended={this.handlePlayerAttended} 
+                    currentAttendance={this.state.currentAttendance}/>
+                </Col>
+              </Row>                   
+            </Col>
+            <Col xs={12} md={3} className="attendance attendance-list-container">
+              <AttendanceMenu 
+                attendance={this.state.data[this.state.currentSeminar].attendance}
+                handleChangeAttendance={this.handleChangeAttendance} />
+            </Col>
+          </Row>
         </div>  
       );
     }  

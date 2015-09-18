@@ -57,3 +57,38 @@ $icon-font-path: "../fonts/";
 .icon-size {
     font-size: 87px;
 }
+
+
+.nav-tabs > li, .nav-pills > li {
+    float:none;
+    display:inline-block;
+    *display: inline;     /* for IE7*/
+    *zoom:1;              /* for IE7*/
+
+}
+
+.nav-tabs, .nav-pills {
+    text-align:center;
+}
+
+.btn-save-attendance {
+    width: 90%;
+}
+
+.attendance-list-container {
+    margin: 10px auto
+}
+
+.bootstrap-datetimepicker-widget {
+    
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    width: 300px;
+    transform: translate(-50%, -50%) !important;
+}
+
+.datepicker-days > table {
+    margin-left:auto; 
+    margin-right:auto;
+}

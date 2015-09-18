@@ -86,22 +86,19 @@ var Attendance = React.createClass({
         <div className="row">
           <div className="col-xs-12"> 
             <div className="row">
-              <div className="col-xs-12 col-md-3"> 
-
+              <div className="col-xs-6 col-md-3 text-left"> 
                 <fieldset disabled={this.props.currentAttendance ? false:true}>
                   <DateTimeField 
-                                 
                     inputFormat='D. MMM - h:mm' 
-                    onChange={this.changeDate.bind(this, this.props.currentAttendance)} 
-                    
+                    onChange={this.changeDate.bind(this, this.props.currentAttendance)}
                     format="YYYY-MM-DDTHH:mm:ss.SSS"
                     dateTime={this.state.date} />
                 </fieldset>
               </div>
-              <div className="col-xs-12 col-md-3">
+              <div className="col-xs-6 col-md-3 text-right">
                 <button 
                   type="button"                 
-                  className="btn btn-primary btn-md btn-block" 
+                  className="btn btn-success btn-md" 
                   onClick={this.addAttendance}>Ný mæting</button>
               </div>
             </div>    

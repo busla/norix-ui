@@ -1,5 +1,8 @@
+'use strict';
+
 var React = require('react');
 var Main = require('./Main');
+var SeminarService = require('./services/Services');
 
 var ReactBootstrap = require('react-bootstrap'),
     Nav = ReactBootstrap.Nav,
@@ -41,32 +44,8 @@ var NoriLogin = React.createClass({
   getInitialState: function () {
     return {
       isAuthenticated: (localStorage.token ? true:false),
-      loading: false     
+      loading: false
     }    
-  },
-
-  loginRequest: function(loginUrl, apiUrl, payload) {
-    
-    var xhr = new XMLHttpRequest();    
-    xhr.open('post', loginUrl, true);
-    
-    xhr.onload = function() {
-      var data = JSON.parse(xhr.responseText);
-      //console.log(data);
-      
-      if (!('err' in data)) {      
-        localStorage.token = data.token;
-        localStorage.username = data.username;
-        this.setState({ isAuthenticated: true, loading: false }); 
-        React.render(<Main url={apiUrl} />, document.getElementById('main') );       
-      }
-      else {
-        this.setState({loading: false }); 
-      }
-      
-    }.bind(this);
-
-    xhr.send(JSON.stringify(payload)); 
   },
 
   logIn: function(e) {
@@ -80,7 +59,21 @@ var NoriLogin = React.createClass({
         club: this.refs.club.getValue()
     };
    
-    this.loginRequest(loginUrl, apiUrl, payload);
+    SeminarService.loginRequest(loginUrl, apiUrl, payload, function(err, data) {
+      if (err) {
+        console.log(err)
+        this.setState({loading: false });
+      }
+
+      else {
+        console.log(data)
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('username', data.username);
+        this.setState({ isAuthenticated: true, loading: false }); 
+        React.render(<Main url={apiUrl} sidebarOpen={this.state.sidebarOpen} />, document.getElementById('main') );
+      }
+      
+    }.bind(this));
     
   },
   
@@ -88,18 +81,18 @@ var NoriLogin = React.createClass({
     e.preventDefault();
     this.setState({loading: true});
     console.log(localStorage.token);
-    NoriLogin.authenticate('http://localhost:1337/sync', localStorage.token, function(results) {      
-      if (!('err' in results)) {                       
-          this.setState({isAuthenticated: true});
-          React.render(<Main url="http://localhost:1337/seminar" />, document.getElementById('main') );
-          this.setState({loading: false});
+    SeminarService.authenticate('http://localhost:1337/sync', localStorage.token, function(err, results) {      
+      if (err) {
+        console.log(err);
+        this.logout();
       }
       else {
-        console.log(results);
-        this.logout();  
+        this.setState({isAuthenticated: true});
+        React.render(<Main url="http://localhost:1337/seminar" sidebarOpen={this.state.sidebarOpen}/>, document.getElementById('main') );
+        this.setState({loading: false});
       }
       
-    }.bind(this))
+    }.bind(this));
     
     console.log(this.state.loading);
   },    
@@ -108,7 +101,7 @@ var NoriLogin = React.createClass({
     NoriLogin.authenticate('http://localhost:1337/seminar', localStorage.token, function(results) {      
       if (!('err' in results)) {              
           this.setState({isAuthenticated: true});
-          React.render(<Main url="http://localhost:1337/seminar" />, document.getElementById('main') );
+          React.render(<Main sidebarOpen={this.state.sidebarOpen} url="http://localhost:1337/seminar" />, document.getElementById('main') );          
       }
       else {
         console.log(results);
@@ -119,14 +112,15 @@ var NoriLogin = React.createClass({
   },
 
   logout: function() {
-    delete localStorage.token;
-    delete localStorage.username;
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
     this.setState({ isAuthenticated: false });
     React.unmountComponentAtNode(document.getElementById('main'));
   },
 
   render: function() {   
-    //console.log(this.state.isAuthenticated); 
+    //console.log(this.state.isAuthenticated);
+
     if (this.state.isAuthenticated) {
       var navMarkup = (
         <Col 

@@ -1,10 +1,12 @@
-var React = require('react');
+'use strict';
 
+var React = require('react');
 var Waiting = require('./Waiting');
 var SeminarNavigation = require('./SeminarNavigation');
 var Attendance = require('./Attendance');
 var AttendanceMenu = require('./AttendanceMenu');
 var _ = require('underscore');
+var SeminarService = require('./services/Services');
 
 var ReactBootstrap = require('react-bootstrap'),
     Nav = ReactBootstrap.Nav,
@@ -29,45 +31,40 @@ var Main = React.createClass({
         data: [],
         currentSeminar: 0,
         currentAttendance: null        
-    };
+    }
   },
-  
+
   getSeminars: function(currentAttendance) {
-
-    $.ajax({      
-          url: this.props.url,
-          cache: true,
-          headers: {
-            'Authorization': 'Bearer '+localStorage.token
-          },          
-          success: function(data) {
-            if (this.isMounted()) {
-              data.forEach(function(seminar) {
-                seminar.attendance.forEach(function(attendance) {            
-                  attendance.attended.forEach(function(attended) {                    
-                    attended.attended = (attended.attended === 'true');
-                  });
-                });
+    SeminarService.getSeminars('http://localhost:1337/seminar', function(err, data) {      
+      if (err) {
+        console.log(err);
+        this.logout();
+      }
+      else {
+        if (this.isMounted()) {
+          data.forEach(function(seminar) {
+            seminar.attendance.forEach(function(attendance) {            
+              attendance.attended.forEach(function(attended) {                    
+                attended.attended = (attended.attended === 'true');
               });
-              
-              this.setState({ data: data});
-              
-              if (currentAttendance) {
-                this.setState({currentAttendance: currentAttendance})
-              }
-            }
-          }.bind(this),
-
-          error: function(xhr, status, err) {
-            console.error(this.props.url, status, err.toString());
-          }.bind(this)
-        });
+            });
+          });
+          
+          this.setState({ data: data});
+          
+          if (currentAttendance) {
+            this.setState({currentAttendance: currentAttendance})
+          }
+        }
+      }
+      
+    }.bind(this));
   },
 
   componentDidMount: function() {    
     this.getSeminars();    
   },
-  
+
   componentWillReceiveProps: function(nextProps) {
     this.getSeminars();
   },
@@ -116,23 +113,25 @@ var Main = React.createClass({
     if (this.state.data.length === 0) {
       return null;
     }
+
     else {
-    var attendance = this.state.currentAttendance;
-    
-    if (attendance) {
-      attendance = _.findWhere(this.state.data[this.state.currentSeminar].attendance, {id: this.state.currentAttendance});      
+      var attendance = this.state.currentAttendance;
       
+      if (attendance) {
+        attendance = _.findWhere(this.state.data[this.state.currentSeminar].attendance, {id: this.state.currentAttendance});      
+        
     }
       return(
         <div className="container">
-          <Row>
-            <Col xs={12} md={9}>            
-              <Row>
-                <Col xs={12}>
                   <SeminarNavigation
                     currentSeminar={this.state.currentSeminar}
                     seminarList={this.state.data}
                     changeSeminar={this.changeSeminar} />
+          <Row>
+            <Col xs={12} md={9}>            
+              <Row>
+                <Col xs={12}>
+
                 </Col>
               </Row>                      
               <Row>

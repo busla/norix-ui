@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 
 var SeminarItem = React.createClass({
@@ -11,9 +13,9 @@ var SeminarItem = React.createClass({
         var players = this.props.seminar.players;
 
         return (
-          <li className={this.props.isCurrent ? 'active' : null} role="presentation">
-            <a href={this.props.seminar.seminar_id} onClick={this.handleClick}>{name}</a>
-          </li>                
+          
+                <a href={this.props.seminar.seminar_id} type="button" className="btn btn-primary" onClick={this.handleClick}>{name} <span className="badge"> {this.props.seminar.players.length}</span></a>
+          
         );
     }
 });

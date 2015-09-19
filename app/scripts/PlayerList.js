@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var Main = require('./Main');
 var PlayerDetail = require('./PlayerDetail');

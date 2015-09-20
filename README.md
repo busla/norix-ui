@@ -3,8 +3,11 @@ Attendance web app built with <a href="https://facebook.github.io/react">React</
 
 The app offers the coach to take attendance on scraped seminars and their athletes.
 
-## What is Nori?
+## What is Norix?
 See <a href="https://github.com/busla/norix-scraper">Norix-scraper</a>
+
+## What is Nori?
+See <a href="http://www.greidslumidlun.is">Nori</a> (in Icelandic)
 
 ## Installation instructions
 ```

@@ -98,6 +98,7 @@ var Main = React.createClass({
   },
 
   changeSeminar: function(index) {
+    console.log('changeSeminar: function(index): ', index)
     this.setState({ currentSeminar: index });
     this.setState({ currentAttendance: null });    
   },

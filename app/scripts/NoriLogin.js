@@ -67,8 +67,8 @@ var NoriLogin = React.createClass({
 
       else {
         console.log(data)
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username);
+        localStorage.token = data.token;
+        localStorage.username = data.username;
         this.setState({ isAuthenticated: true, loading: false }); 
         React.render(<Main url={apiUrl} sidebarOpen={this.state.sidebarOpen} />, document.getElementById('main') );
       }
@@ -112,8 +112,8 @@ var NoriLogin = React.createClass({
   },
 
   logout: function() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
+    delete localStorage.token;
+    delete localStorage.username;
     this.setState({ isAuthenticated: false });
     React.unmountComponentAtNode(document.getElementById('main'));
   },

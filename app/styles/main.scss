@@ -110,3 +110,22 @@ $icon-font-path: "../fonts/";
 .fixed {
     position: fixed;
 }
+
+.seminar-navigation {
+    text-align: center;
+
+    .glyphicon {
+        font-size: $font-size-base;
+        opacity: 0.2;
+        position: absolute;
+        margin-top: $font-size-base * 0.7;
+    }
+
+    .glyphicon-chevron-left {
+        left: 8px
+    }
+    .glyphicon-chevron-right {
+        right: 8px
+    }    
+}
+

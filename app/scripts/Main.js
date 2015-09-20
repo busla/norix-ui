@@ -64,11 +64,11 @@ var Main = React.createClass({
   componentDidMount: function() {    
     this.getSeminars();    
   },
-
+  /*
   componentWillReceiveProps: function(nextProps) {
     this.getSeminars();
   },
-  
+  */
   handlePlayerAttended: function(ssn) {
 
     _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
@@ -122,16 +122,15 @@ var Main = React.createClass({
         
     }
       return(
-        <div className="container">
-                  <SeminarNavigation
-                    currentSeminar={this.state.currentSeminar}
-                    seminarList={this.state.data}
-                    changeSeminar={this.changeSeminar} />
+        <div className="container">                  
           <Row>
             <Col xs={12} md={9}>            
               <Row>
                 <Col xs={12}>
-
+                  <SeminarNavigation
+                    currentSeminar={this.state.currentSeminar}
+                    seminarList={this.state.data}
+                    changeSeminar={this.changeSeminar} />
                 </Col>
               </Row>                      
               <Row>
@@ -147,11 +146,13 @@ var Main = React.createClass({
                 </Col>
               </Row>                   
             </Col>
-            <Col xs={12} md={3} className="attendance attendance-list-container">
+            
+            <Col xs={12} md={3} className="attendance attendance-list-container">              
               <AttendanceMenu 
                 attendance={this.state.data[this.state.currentSeminar].attendance}
                 handleChangeAttendance={this.handleChangeAttendance} />
             </Col>
+            
           </Row>
         </div>  
       );

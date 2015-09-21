@@ -54,7 +54,7 @@ var authenticate = function(apiUrl, token, cb) {
   xhr.setRequestHeader(payload.header, payload.value);
   xhr.onload = function() {
     self.data = JSON.parse(xhr.responseText);
-    console.log('DATA: ', self.data);
+    console.log('Services: ', self.data);
   
     if ('err' in self.data) {              
       cb(self.data.err, null);    

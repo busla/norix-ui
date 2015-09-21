@@ -38,7 +38,7 @@ var Main = React.createClass({
     SeminarService.getSeminars('http://localhost:1337/seminar', function(err, data) {      
       if (err) {
         console.log(err);
-        this.logout();
+        //this.logout();
       }
       else {
         if (this.isMounted()) {
@@ -60,15 +60,22 @@ var Main = React.createClass({
       
     }.bind(this));
   },
+  
 
-  componentDidMount: function() {    
-    this.getSeminars();    
+  componentDidMount: function() {        
+    console.log(this.state.data);
+    this.setState({data: this.props.data})
   },
+
   /*
   componentWillReceiveProps: function(nextProps) {
-    this.getSeminars();
+    if (this.props.data !== nextProps.data) {
+      this.setState({data: nextProps.data})  
+    }
+    
   },
   */
+
   handlePlayerAttended: function(ssn) {
 
     _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
@@ -108,9 +115,9 @@ var Main = React.createClass({
   },
 
 
-  render: function(){
+  render: function(){    
     var info = 'Sæki gögn.....'
-    
+    console.log(this.state.data);
     if (this.state.data.length === 0) {
       return null;
     }

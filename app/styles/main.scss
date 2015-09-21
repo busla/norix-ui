@@ -34,6 +34,10 @@ $icon-font-path: "../fonts/";
     to { -moz-transform: rotate(360deg);}
 }
 
+#main {
+    margin-bottom: 100px !important;
+}
+
 .row {
     margin-top: 10px;
 }
@@ -128,4 +132,3 @@ $icon-font-path: "../fonts/";
         right: 8px
     }    
 }
-

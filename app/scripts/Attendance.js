@@ -73,13 +73,6 @@ var Attendance = React.createClass({
     
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    if (nextProps.currentAttendance) {
-
-      this.setState({date: moment(nextProps.attendance.date).format('YYYY-MM-DDTHH:mm:ss.SSS')});
-    }
-  },
-
   render: function() {
     var info = 'Fann enga mætingu';
 

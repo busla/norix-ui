@@ -1,19 +1,54 @@
 'use strict';
 var React = require('react');
+var ReactBootstrap = require('react-bootstrap'),
+    Glyphicon = ReactBootstrap.Glyphicon,
+    Button = ReactBootstrap.Button,
+    Col = ReactBootstrap.Col,
+    Row = ReactBootstrap.Row;
 
 var DateTimeField= require('react-bootstrap-datetimepicker');
 var PlayerList = require('./PlayerList');
 var moment = require('moment');
 
 var Attendance = React.createClass({
+
   getInitialState: function() {
     return {
-      date: moment().format('YYYY-MM-DDTHH:mm:ss.SSS')
+      date: moment().format('YYYY-MM-DDTHH:mm:ss.SSS'),
 
     }
   },
 
-  changeDate: function(currentAttendance, newDate) {    
+  componentWillReceiveProps: function(nextProps) {    
+    if (nextProps.attendance) {
+      this.setState({date: moment(nextProps.attendance.date).format('YYYY-MM-DDTHH:mm:ss.SSS')})  
+    }
+    
+  },
+
+  saveAttendance: function() {
+
+    $.ajax({
+      url: 'http://localhost:1337/attendance/'+this.props.attendance.id,
+      dataType: 'json', 
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer '+localStorage.token
+      },      
+      async: true,
+      data: this.props.attendance,
+
+      success: function(data) {
+        this.handleSaveAttendance();
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error("http://localhost:1337/attendance", status, err.toString());
+      }.bind(this)
+    });  
+    
+  },
+  changeDate: function(currentAttendance, newDate) {
+    console.log(newDate);    
     this.props.changeDate(newDate, currentAttendance);
   },
 
@@ -34,8 +69,8 @@ var Attendance = React.createClass({
     var attendance = {};
     var players = [];
     var temp = [];
-
-    attendance.date = this.state.date;
+    //this.setState({date: moment().format('YYYY-MM-DDTHH:mm:ss.SSS')});    
+    attendance.date = moment().format('YYYY-MM-DDTHH:mm:ss.SSS');
 
     this.props.seminar.players.forEach(function(player, index) {      
       players.push(
@@ -61,6 +96,7 @@ var Attendance = React.createClass({
       success: function(data) {
         
         if (this.isMounted()) {
+          console.log(data);
           var lastItem = (data.attendance.length - 1);
           this.handleAdd(data.attendance[lastItem].id);
         }
@@ -75,12 +111,14 @@ var Attendance = React.createClass({
 
   render: function() {
     var info = 'Fann enga mætingu';
-
+    console.log(this.state.date);
+    console.log(this.props.attendance);    
+    console.log('this.props.attendance.date: ', (this.props.attendance ? this.props.attendance.date:""));
     return (  
-        <div className="row">
-          <div className="col-xs-12"> 
-            <div className="row">
-              <div className="col-xs-6 col-md-3 text-left"> 
+        <Row>
+          <Col xs={12}> 
+            <Row>
+              <Col xs={6} md={3} bsStyle={"text-left"}>              
                 <fieldset disabled={this.props.currentAttendance ? false:true}>
                   <DateTimeField 
                     inputFormat='D. MMM - h:mm' 
@@ -88,16 +126,18 @@ var Attendance = React.createClass({
                     format="YYYY-MM-DDTHH:mm:ss.SSS"
                     dateTime={this.state.date} />
                 </fieldset>
-              </div>
-              <div className="col-xs-6 col-md-3 text-right">
-                <button 
-                  type="button"                 
-                  className="btn btn-success btn-md" 
-                  onClick={this.addAttendance}>Ný mæting</button>
-              </div>
-            </div>    
-            <div className="row">
-              <div className="col-xs-12">                               
+              </Col>
+              <Col xs={6} md={3} bsStyle="text-right">
+                <Button 
+                  bsStyle="success"
+
+                  onClick={this.addAttendance}>
+                    <Glyphicon glyph="plus"/> Ný mæting
+                </Button>              
+              </Col>
+            </Row>    
+            <Row>
+              <Col xs={12}>                               
                 <PlayerList
                   handleSaveAttendance={this.handleSaveAttendance}
                   handleAdd={this.handleAdd}
@@ -106,10 +146,19 @@ var Attendance = React.createClass({
                   seminar={this.props.seminar.seminar_id}
                   handlePlayerAttended={this.handlePlayerAttended}                 
                   attendance={this.props.attendance}/>                
-              </div>
-            </div>                  
-          </div>
-        </div>
+              </Col>
+            </Row>
+            <Row>
+              <Button
+                bsStyle="success"
+                className="btn-save-attendance"                
+                disabled={this.props.attendance ? false:true} 
+                onClick={this.saveAttendance}>
+                  <Glyphicon glyph="ok"/> Vista
+              </Button> 
+            </Row>                              
+          </Col>
+        </Row>
 
     );
   }    

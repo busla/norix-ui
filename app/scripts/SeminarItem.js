@@ -6,7 +6,7 @@ var SeminarItem = React.createClass({
     handleClick: function(e){
       console.log('handleClick: ', e);
       e.preventDefault();
-      this.props.handleClick();
+      //this.props.handleClick();
     },
 
     render: function() {

@@ -18,29 +18,6 @@ var PlayerList = React.createClass({
     this.props.handlePlayerAttended(ssn);
   },
 
-
-  saveAttendance: function() {
-
-    $.ajax({
-      url: 'http://localhost:1337/attendance/'+this.props.attendance.id,
-      dataType: 'json', 
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer '+localStorage.token
-      },      
-      async: true,
-      data: this.props.attendance,
-
-      success: function(data) {
-        this.handleSaveAttendance();
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("http://localhost:1337/attendance", status, err.toString());
-      }.bind(this)
-    });  
-    
-  },
-
   render: function() {
 
     var players = [];  
@@ -100,11 +77,7 @@ var PlayerList = React.createClass({
           </div>
           <div className="row">
             <div className="col-xs-12 text-center">             
-              <button 
-                type="button"                
-                className="btn btn-success btn-lg btn-save-attendance"
-                disabled={this.props.attendance ? false:true} 
-                onClick={this.saveAttendance}>Vista</button>            
+           
             </div>
           </div>                                           
         </div>

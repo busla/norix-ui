@@ -34,9 +34,9 @@ var Main = React.createClass({
     }
   },
 
-  getSeminars: function(currentAttendance) {
+  getSeminars: function(currentAttendance) {    
     SeminarService.getSeminars('http://localhost:1337/seminar', function(err, data) {     
-      console.log(data); 
+      console.log('getSeminars: ', data); 
       if (err) {
         console.log(err);
         //this.logout();
@@ -118,7 +118,7 @@ var Main = React.createClass({
 
   render: function(){    
     var info = 'Sæki gögn.....'
-    console.log(this.state.data[this.state.currentSeminar]);
+    //console.log(this.state.data[this.state.currentSeminar]);
     if (this.state.data.length === 0) {
       return null;
     }

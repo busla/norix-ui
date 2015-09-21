@@ -35,14 +35,15 @@ var Main = React.createClass({
   },
 
   getSeminars: function(currentAttendance) {
-    SeminarService.getSeminars('http://localhost:1337/seminar', function(err, data) {      
+    SeminarService.getSeminars('http://localhost:1337/seminar', function(err, data) {     
+      console.log(data); 
       if (err) {
         console.log(err);
         //this.logout();
       }
       else {
         if (this.isMounted()) {
-          data.forEach(function(seminar) {
+          data.data.forEach(function(seminar) {
             seminar.attendance.forEach(function(attendance) {            
               attendance.attended.forEach(function(attended) {                    
                 attended.attended = (attended.attended === 'true');
@@ -50,7 +51,7 @@ var Main = React.createClass({
             });
           });
           
-          this.setState({ data: data});
+          this.setState({ data: data.data});
           
           if (currentAttendance) {
             this.setState({currentAttendance: currentAttendance})
@@ -117,7 +118,7 @@ var Main = React.createClass({
 
   render: function(){    
     var info = 'Sæki gögn.....'
-    console.log(this.state.data);
+    console.log(this.state.data[this.state.currentSeminar]);
     if (this.state.data.length === 0) {
       return null;
     }

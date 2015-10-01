@@ -1,79 +1,46 @@
 {
-  "name": "demo",
-  "version": "0.0.0",
+  "name": "norix-ui",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "webpack",
+    "dev": "node server.js",
+    "prod": "http-server dist/.",
+    "postinstall": "NODE_ENV=production webpack -p --progress --colors --display-error-details --display-modules --config webpack.production.config.js"
+  },
   "dependencies": {
+    "babel-core": "^5.8.25",
+    "babel-loader": "^5.3.2",
+    "bootstrap-sass": "^3.2.0",
+    "css-loader": "^0.19.0",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.6.1",
+    "http-server": "^0.8.5",
+    "jquery": "^2.1.4",
+    "json-loader": "^0.5.3",
+    "jsx-loader": "^0.13.2",
     "merge": "^1.2.0",
     "moment": "^2.10.6",
+    "node-sass": "^3.3.3",
+    "react": "^0.13.3",
     "react-bootstrap": "^0.25.2",
     "react-bootstrap-datetimepicker": "0.0.20",
     "react-loader": "^1.4.0",
-    "react-sidebar": "^1.0.4",
     "react-swipe": "^2.3.0",
-    "react-swipe-views": "0.0.9",
-    "react-swipeable": "^3.0.2",
-    "react-swiper": "^0.1.4",
-    "react-swipr": "^2.0.0",
-    "swipe-js-iso": "^2.0.1",
-    "underscore": "^1.8.3"
-  },
-  "devDependencies": {
-    "del": "~0.1.3",
-    "gulp": "~3.8.8",
-    "gulp-autoprefixer": "~1.0.1",
-    "gulp-bower": "0.0.6",
-    "gulp-cache": "~0.2.4",
-    "gulp-imagemin": "latest",
-    "gulp-jest": "~0.2.2",
-    "gulp-jshint": "~1.8.5",
-    "gulp-load-plugins": "~0.7.0",
-    "gulp-ruby-sass": "~1.0.5",
-    "browser-sync": "latest",
-    "gulp-size": "~1.1.0",
-    "gulp-useref": "~0.4.4",
-    "gulp-util": "~3.0.1",
-    "gulp-webserver": "latest",
-    "jest-cli": "latest",
-    "react": "latest",
-    "react-tools": "latest",
-    "reactify": "latest",
-    "watchify": "~2.1",
-    "browserify-shim": "^3.8.0",
-    "gulp-uglify": "^1.0.2",
-    "strip-debug": "^1.0.1",
-    "gulp-strip-debug": "^1.0.2",
-    "vinyl-source-stream": "^1.0.0",
-    "main-bower-files": "~2.6.2",
-    "babelify": "^6.1.3"
+    "sass-loader": "^2.0.1",
+    "style-loader": "^0.12.4",
+    "underscore": "^1.8.3",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.12.2"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": "0.12.7",
+    "npm": "2.14.1"
   },
-  "scripts": {
-    "test": "jest"
+  "devDependencies": {
+    "react-hot-loader": "^1.3.0",
+    "webpack-dev-server": "^1.12.0"
   },
-  "jest": {
-    "scriptPreprocessor": "<rootDir>/preprocessor.js",
-    "unmockedModulePathPatterns": [
-      "<rootDir>/node_modules/react"
-    ]
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim",
-      [
-        "babelify",
-        {
-          "ignore": [
-            "bower_components"
-          ]
-        }
-      ]
-    ]
-  },
-  "browser": {
-    "jquery": "./app/bower_components/jquery/dist/jquery.js"
-  },
-  "browserify-shim": {
-    "jquery": "$"
-  }
+  "author": "Jon Levy ",
+  "license": "MIT"
 }

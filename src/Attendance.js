@@ -29,9 +29,12 @@ var Attendance = React.createClass({
     
   },
 
-  changeDate: function(currentAttendance, newDate) {
-    //console.log(newDate);    
-    this.props.changeDate(newDate, currentAttendance);
+  changeDate: function(attendance, newDate) {
+    
+    attendance.date = newDate;                    
+    
+
+    this.props.changeDate(attendance);
   },
 
   
@@ -106,7 +109,7 @@ var Attendance = React.createClass({
                 <fieldset disabled={this.props.currentAttendance ? false:true}>
                   <DateTimeField 
                     inputFormat='D. MMM - h:mm' 
-                    onChange={this.changeDate.bind(this, this.props.currentAttendance)}
+                    onChange={this.changeDate.bind(this, this.props.attendance)}
                     format="YYYY-MM-DDTHH:mm:ss.SSS"
                     dateTime={this.state.date} />
                 </fieldset>

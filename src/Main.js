@@ -43,7 +43,7 @@ var Main = React.createClass({
         console.log(err)        
       }
       else {
-        //console.log('Vistaði mætingu: ', data.attended);
+        console.log('Vistaði mætingu: ', data);
         this.getSeminars(attendance.id)
       }
       
@@ -83,15 +83,9 @@ var Main = React.createClass({
     this.setState({data: this.props.data})
   },
   
-  changeDate: function(newDate, currentAttendance) {    
-    _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
-      if (attendance.id == currentAttendance) {
-        attendance.date = newDate;          
-      }              
-    });
+  changeDate: function(attendance) {    
     
-
-    this.setState({data: this.state.data});
+    this.putAttendance(attendance);
   },
 
   handleAdd: function(currentAttendance) {

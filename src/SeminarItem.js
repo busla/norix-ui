@@ -17,7 +17,7 @@ var SeminarItem = React.createClass({
           case "mobile":
             return (          
               <a 
-                href={this.props.seminar.seminar_id} 
+                href="#"
                 type="button" 
                 className="btn btn-primary">
                   

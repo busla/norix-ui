@@ -9,6 +9,8 @@ var ReactBootstrap = require('react-bootstrap'),
 var DateTimeField= require('react-bootstrap-datetimepicker');
 var PlayerList = require('./PlayerList');
 var moment = require('moment');
+var SeminarService = require('./services/Services');
+var _ = require('underscore');
 
 var Attendance = React.createClass({
 
@@ -19,52 +21,38 @@ var Attendance = React.createClass({
     }
   },
 
-  componentWillReceiveProps: function(nextProps) {    
+  componentWillReceiveProps: function(nextProps) { 
+    //console.log('nextProps.attendance.attended: ', nextProps.attendance.attended);   
     if (nextProps.attendance) {
       this.setState({date: moment(nextProps.attendance.date).format('YYYY-MM-DDTHH:mm:ss.SSS')})  
     }
     
   },
 
-  saveAttendance: function() {
-
-    $.ajax({
-      url: 'http://localhost:1337/attendance/'+this.props.attendance.id,
-      dataType: 'json', 
-      method: 'PUT',
-      headers: {
-        'Authorization': 'Bearer '+localStorage.token
-      },      
-      async: true,
-      data: this.props.attendance,
-
-      success: function(data) {
-        this.handleSaveAttendance();
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error("http://localhost:1337/attendance", status, err.toString());
-      }.bind(this)
-    });  
-    
-  },
   changeDate: function(currentAttendance, newDate) {
-    console.log(newDate);    
+    //console.log(newDate);    
     this.props.changeDate(newDate, currentAttendance);
   },
 
-  handleSaveAttendance: function() {
-    this.props.handleSaveAttendance();
-  },
   
   handleAdd: function(currentAttendance) {
     this.props.handleAdd(currentAttendance);
   },
   
   handlePlayerAttended: function(ssn) {
-    this.props.handlePlayerAttended(ssn);
+   //var attendanceList = this.state.data[this.state.currentSeminar].attendance;
+    //_.each(attendanceList, function(attendance) {      
+      _.each(this.props.attendance.attended, function(player) {
+          if (player.ssn == ssn) {
+            player.attended = !player.attended;  
+          }        
+      });
+    //});
+
+    this.props.handlePlayerAttended(this.props.attendance);
   },
 
-  addAttendance: function() {
+  newAttendance: function() {
     var seminars = [];
     var attendance = {};
     var players = [];
@@ -81,39 +69,35 @@ var Attendance = React.createClass({
     });
     
     attendance.attended = players;
-    var url = 'http://localhost:1337/seminar/'+this.props.seminar.seminar_id+'/attendance';
+    //console.log('attendance.attended: ', attendance.attended);
 
-    $.ajax({
-      url: url,
-      dataType: 'json',  
-      method: 'POST',
-      async: true,
-      headers: {
-        'Authorization': 'Bearer '+localStorage.token
-      },      
-      data: attendance,
+    var apiUrl = SeminarService.apiUrl+'/seminar/'+this.props.seminar.seminar_id+'/attendance';
+    var payload = attendance;
+    //console.log(apiUrl);
 
-      success: function(data) {
-        
+    SeminarService.newAttendance(apiUrl, payload, function(err, data) {
+      if (err) {
+        console.log(err)        
+      }
+      else {
+        //console.log(data);
         if (this.isMounted()) {
-          console.log(data);
+          //console.log(data);
           var lastItem = (data.attendance.length - 1);
           this.handleAdd(data.attendance[lastItem].id);
-        }
-        
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(url, status, err.toString());
-      }.bind(this)
-    });  
+        }        
+      }
+      
+    }.bind(this));     
+
     
   },
 
   render: function() {
     var info = 'Fann enga mætingu';
-    console.log(this.state.date);
-    console.log(this.props.attendance);    
-    console.log('this.props.attendance.date: ', (this.props.attendance ? this.props.attendance.date:""));
+    //console.log(this.state.date);
+    //console.log(this.props.attendance);    
+    //console.log('this.props.attendance.date: ', (this.props.attendance ? this.props.attendance.date:""));
     return (  
         <Row>
           <Col xs={12}> 
@@ -131,7 +115,7 @@ var Attendance = React.createClass({
                 <Button 
                   bsStyle="success"
 
-                  onClick={this.addAttendance}>
+                  onClick={this.newAttendance}>
                     <Glyphicon glyph="plus"/> Ný mæting
                 </Button>              
               </Col>
@@ -139,7 +123,7 @@ var Attendance = React.createClass({
             <Row>
               <Col xs={12}>                               
                 <PlayerList
-                  handleSaveAttendance={this.handleSaveAttendance}
+                  handlePutAttendance={this.handlePutAttendance}
                   handleAdd={this.handleAdd}
                   date={this.state.date}
                   players={this.props.seminar.players}
@@ -147,16 +131,7 @@ var Attendance = React.createClass({
                   handlePlayerAttended={this.handlePlayerAttended}                 
                   attendance={this.props.attendance}/>                
               </Col>
-            </Row>
-            <Row>
-              <Button
-                bsStyle="success"
-                className="btn-save-attendance"                
-                disabled={this.props.attendance ? false:true} 
-                onClick={this.saveAttendance}>
-                  <Glyphicon glyph="ok"/> Vista
-              </Button> 
-            </Row>                              
+            </Row>                             
           </Col>
         </Row>
 

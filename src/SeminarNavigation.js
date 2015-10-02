@@ -5,6 +5,7 @@ var ReactSwipe = require('react-swipe')
 var ReactBootstrap = require('react-bootstrap'),
     Glyphicon = ReactBootstrap.Glyphicon;
 var SeminarItem = require('./SeminarItem');
+var MediaQuery = require('react-responsive');
 
 var SeminarNavigation = React.createClass({
 
@@ -12,21 +13,28 @@ var SeminarNavigation = React.createClass({
     this.props.changeSeminar(index);
   }, 
 
+  handleClick: function(index) {    
+    this.props.changeSeminar(index);
+  },
+
   handleSwipe: function(e) {
     console.log(e);
     this.props.changeSeminar(e);    
   },
   
   render: function() {
-  var seminars = [];
+  var seminarsMobile = [];
+  var seminarsDesktop = [];
+
     this.props.seminarList.forEach(function(seminar, index) {        
-        seminars.push(
+        seminarsMobile.push(
 
           <span className="seminar-navigation" key={index}>              
           <Glyphicon 
             glyph={index !== 0 ? "chevron-left":""}
             className="glyph-light"/>
-              <SeminarItem                  
+              <SeminarItem
+                device="mobile"                  
                 isCurrent={(this.props.currentSeminar === index)}
                 seminar={seminar}
                 key={seminar.seminar_id}
@@ -36,14 +44,32 @@ var SeminarNavigation = React.createClass({
             className="glyph-light"/>                                
           </span>)
     }.bind(this));
+
+    this.props.seminarList.forEach(function(seminar, index) {
+        seminarsDesktop.push(
+          <SeminarItem
+            device="desktop"
+            handleClick={this.handleClick.bind(this, index)}
+            isCurrent={(this.props.currentSeminar === index)}
+            seminar={seminar}
+            key={seminar.seminar_id}
+            changeSeminar={this.changeSeminar}/>)
+    }.bind(this));    
   
     return (
-      <div className="row">
-        <ReactSwipe
-            continuous={false}
-            transitionEnd={this.handleSwipe}>
-                {seminars}
-        </ReactSwipe>
+      <div>
+        <MediaQuery query='(max-device-width: 1224px)'>
+          <div className="row">
+            <ReactSwipe
+                continuous={false}
+                transitionEnd={this.handleSwipe}>
+                    {seminarsMobile}
+            </ReactSwipe>
+          </div>
+        </MediaQuery>
+        <MediaQuery query='(min-device-width: 1224px)'>
+          <ul className="nav nav-pills">{seminarsDesktop}</ul> 
+        </MediaQuery>
       </div>
     );
   }

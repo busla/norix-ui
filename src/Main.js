@@ -34,62 +34,55 @@ var Main = React.createClass({
     }
   },
 
-  getSeminars: function(currentAttendance) {    
-    SeminarService.getSeminars('http://localhost:1337/seminar', function(err, data) {     
-      console.log('getSeminars: ', data); 
+  putAttendance: function(attendance) {
+    var apiUrl = SeminarService.apiUrl + '/attendance/' + attendance.id;
+    var payload = attendance;
+
+    SeminarService.putAttendance(apiUrl, payload, function(err, data) {
       if (err) {
-        console.log(err);
-        //this.logout();
+        console.log(err)        
       }
       else {
-        if (this.isMounted()) {
-          data.data.forEach(function(seminar) {
-            seminar.attendance.forEach(function(attendance) {            
-              attendance.attended.forEach(function(attended) {                    
-                attended.attended = (attended.attended === 'true');
-              });
-            });
-          });
-          
-          this.setState({ data: data.data});
-          
-          if (currentAttendance) {
-            this.setState({currentAttendance: currentAttendance})
-          }
-        }
+        //console.log('Vistaði mætingu: ', data.attended);
+        this.getSeminars(attendance.id)
       }
       
-    }.bind(this));
+    }.bind(this));  
   },
-  
 
+  getSeminars: function(currentAttendance) {    
+      SeminarService.getSeminars(SeminarService.apiUrl+'/seminar', function(err, data) {     
+        //console.log('getSeminars: ', data); 
+        if (err) {
+          console.log(err);
+          //this.logout();
+        }
+        else {
+          if (this.isMounted()) {
+
+            //console.log('data.data: ',  data.data);            
+            //React.render(<Main data={data.data} getSeminars={this.getSeminars} url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
+            
+            if (currentAttendance) {
+              //console.log('currentAttendance: ', currentAttendance);
+              this.setState({data: data.data, currentAttendance: currentAttendance});
+              return;
+            }
+
+            this.setState({ data: data.data});
+            
+            
+          }
+        }
+        
+      }.bind(this));
+    },  
+  
   componentDidMount: function() {        
-    console.log(this.state.data);
+    //console.log('this.setState({data: this.props.data})', this.props.data);
     this.setState({data: this.props.data})
   },
-
-  /*
-  componentWillReceiveProps: function(nextProps) {
-    if (this.props.data !== nextProps.data) {
-      this.setState({data: nextProps.data})  
-    }
-    
-  },
-  */
-
-  handlePlayerAttended: function(ssn) {
-
-    _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
-      _.each(attendance.attended, function(player) {
-          if (player.ssn == ssn) {
-            player.attended = !player.attended;  
-          }        
-      });
-    });
-
-    this.setState({data: this.state.data});
-  },
-   
+  
   changeDate: function(newDate, currentAttendance) {    
     _.each(this.state.data[this.state.currentSeminar].attendance, function(attendance) {      
       if (attendance.id == currentAttendance) {
@@ -106,29 +99,39 @@ var Main = React.createClass({
   },
 
   changeSeminar: function(index) {
-    console.log('changeSeminar: function(index): ', index)
+    //console.log('changeSeminar: function(index): ', index)
     this.setState({ currentSeminar: index });
     this.setState({ currentAttendance: null });    
   },
+  handlePlayerAttended: function(attendance) {
 
-  handleChangeAttendance: function(aid) {
+    this.putAttendance(attendance);
+
+  },
+
+  handleChangeAttendance: function(aid) { 
+    //console.log('handleChangeAttendance: ', this.state.data[this.state.currentSeminar].attendance);
     this.setState({ currentAttendance: aid });
   },
 
 
   render: function(){    
+
     var info = 'Sæki gögn.....'
+
     //console.log(this.state.data[this.state.currentSeminar]);
     if (this.state.data.length === 0) {
       return null;
     }
 
     else {
-      var attendance = this.state.currentAttendance;
+      //console.log('currentAttendance: ',this.state.currentAttendance);
+      //var currentAttendance = this.state.currentAttendance;
       
-      if (attendance) {
-        attendance = _.findWhere(this.state.data[this.state.currentSeminar].attendance, {id: this.state.currentAttendance});      
+      if (this.state.currentAttendance) {
         
+        var attendance = _.findWhere(this.state.data[this.state.currentSeminar].attendance, {id: this.state.currentAttendance});      
+        //console.log(attendance);
     }
       return(
         <div className="container">                  
@@ -145,8 +148,7 @@ var Main = React.createClass({
               <Row>
                 <Col xs={12}>
                   <Attendance 
-                    changeDate={this.changeDate}
-                    handleSaveAttendance={this.getSeminars}
+                    changeDate={this.changeDate}                    
                     handleAdd={this.handleAdd} 
                     attendance={attendance}                 
                     seminar={this.state.data[this.state.currentSeminar]}

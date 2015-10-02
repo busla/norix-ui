@@ -55,6 +55,10 @@ var config = {
           loader: 'url?limit=100000'
         },
         {
+          test: /\.woff2$/,
+          loader: 'url?limit=100000'
+        },        
+        {
           test: /\.eot$/,
           loader: 'url?limit=100000'
         },       

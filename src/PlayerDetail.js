@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+
 var PlayerDetail = React.createClass({
 
   handlePlayerAttended: function(ssn) {
@@ -10,7 +11,7 @@ var PlayerDetail = React.createClass({
   },
 
   render: function() {    
-    
+    //console.log('playerDetail: ', this.props.attended);
     return (
         
       <tr>

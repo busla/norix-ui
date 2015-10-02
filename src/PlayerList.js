@@ -19,19 +19,22 @@ var PlayerList = React.createClass({
   },
 
   render: function() {
-
+    //console.log('attendance: ', this.props.attendance);
     var players = [];  
 
-    if (this.props.attendance) {      
+
+    if (this.props.attendance) { 
+
+      var attendance = this.props.attendance;   
       var info = 'Fann enga mætingu';
       this.props.players.forEach(function(player) {
-        this.props.attendance.attended.filter(function(a){
+        attendance.attended.filter(function(a){
           
           if (a.ssn == player.ssn) {
             players.push(
               <PlayerDetail 
                 date={this.props.date}
-                attendance={this.props.attendance}
+                attendance={attendance}
                 attended={a.attended}
                 player={player} 
                 key={player.ssn}
@@ -46,7 +49,7 @@ var PlayerList = React.createClass({
         players.push(
           <PlayerDetail 
             date={this.props.date}
-            attendance={this.props.attendance}
+            attendance={attendance}
             player={player} 
             key={player.ssn}
             handlePlayerAttended={this.handlePlayerAttended.bind(this, player.ssn)} />);

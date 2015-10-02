@@ -18,8 +18,9 @@ var ReactBootstrap = require('react-bootstrap'),
     Col = ReactBootstrap.Col,
     Row = ReactBootstrap.Row;
 
-var NoriLogin = React.createClass({
 
+var NoriLogin = React.createClass({
+  /*
   statics: {
     authenticate: function(apiUrl, token, cb) { 
 
@@ -38,9 +39,10 @@ var NoriLogin = React.createClass({
       }.bind(this);
 
       xhr.send();    
-    }
+    },
+
   },
-  
+  */
   getInitialState: function () {
     return {
       isAuthenticated: (localStorage.token ? true:false),
@@ -51,8 +53,8 @@ var NoriLogin = React.createClass({
   logIn: function(e) {
     e.preventDefault();
     this.setState({loading: true});  
-    var loginUrl = 'http://localhost:1337/login';
-    var apiUrl = 'http://localhost:1337/seminar';
+    var loginUrl = SeminarService.apiUrl+'/login';
+    var apiUrl = SeminarService.apiUrl+'/seminar';
     var payload = {      
         user: this.refs.user.getValue(),
         password: this.refs.password.getValue(),
@@ -70,7 +72,7 @@ var NoriLogin = React.createClass({
         localStorage.token = data.token;
         localStorage.username = data.username;
         this.setState({ isAuthenticated: true, loading: false }); 
-        React.render(<Main data={data.data} url="http://localhost:1337/seminar" />, document.getElementById('main') );
+        React.render(<Main data={data.data} url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
       }
       
     }.bind(this));
@@ -81,14 +83,14 @@ var NoriLogin = React.createClass({
     e.preventDefault();
     this.setState({loading: true});
     console.log(localStorage.token);
-    SeminarService.authenticate('http://localhost:1337/sync', localStorage.token, function(err, results) {      
+    SeminarService.authenticate(SeminarService.apiUrl+'/sync', localStorage.token, function(err, results) {      
       if (err) {
         console.log(err);
         this.logout();
       }
       else {
         this.setState({isAuthenticated: true});
-        React.render(<Main url="http://localhost:1337/seminar" />, document.getElementById('main') );
+        React.render(<Main url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
         this.setState({loading: false});
       }
       
@@ -102,39 +104,24 @@ var NoriLogin = React.createClass({
     React.unmountComponentAtNode(document.getElementById('main'));
   },
   */
-  componentDidMount: function() {     
-    SeminarService.authenticate('http://localhost:1337/seminar', localStorage.token, function(err, data) {            
+  
+  
+  componentDidMount: function() {
+    //this.getSeminars();   
+      
+    SeminarService.authenticate(SeminarService.apiUrl+'/seminar', localStorage.token, function(err, data) {            
 
       if (err) {
         console.log(err);
         this.logout();
       }
       else {
-        React.render(<Main data={data.data} url="http://localhost:1337/seminar" />, document.getElementById('main') );
+        React.render(<Main data={data.data} url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
       }
-    //this.setState({isAuthenticated: true});
-    
-    //this.setState({loading: false});
-    
       
     }.bind(this));
-    
-    
-    
-
-  /*
-    NoriLogin.authenticate('http://localhost:1337/seminar', localStorage.token, function(results) {      
-      if (!('err' in results)) {              
-          this.setState({isAuthenticated: true});
-          React.render(<Main url="http://localhost:1337/seminar" data={data.data} />, document.getElementById('main') );          
-      }
-      else {
-        console.log(results);
-        this.logout();  
-      }
+  
       
-    }.bind(this))
-  */  
   },
   
   logout: function() {
@@ -145,7 +132,7 @@ var NoriLogin = React.createClass({
   },
 
   render: function() {   
-    //console.log(this.state.isAuthenticated);
+    
 
     if (this.state.isAuthenticated) {
       var navMarkup = (

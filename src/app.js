@@ -1,5 +1,5 @@
 'use strict';
-
+require('./sass/main.scss');
 var React = require('react');
 var _ = require('underscore');
 

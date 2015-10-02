@@ -3,6 +3,52 @@ var authHeader = {
   value: 'Bearer '+localStorage.token
 };
 
+var apiUrl = "http://localhost:1337";
+
+var newAttendance = function(apiUrl, payload, cb) {
+    console.log(apiUrl);
+    var self = this;
+    var xhr = new XMLHttpRequest();    
+    xhr.open('post', apiUrl, true);
+    xhr.setRequestHeader(authHeader.header, authHeader.value);
+
+    xhr.onload = function() {
+      self.data = JSON.parse(xhr.responseText);    
+      
+      if ('err' in self.data) {              
+        cb(self.data.err, null);    
+        return;
+      }
+      
+      cb(null, self.data);
+      
+    }.bind(this);
+
+    xhr.send(JSON.stringify(payload));
+};
+
+var putAttendance = function(apiUrl, payload, cb) {
+
+    var self = this;
+    var xhr = new XMLHttpRequest();    
+    xhr.open('put', apiUrl, true);
+    xhr.setRequestHeader(authHeader.header, authHeader.value);
+
+    xhr.onload = function() {
+      self.data = JSON.parse(xhr.responseText);    
+      
+      if ('err' in self.data) {              
+        cb(self.data.err, null);    
+        return;
+      }
+      
+      cb(null, self.data);
+      
+    }.bind(this);
+
+    xhr.send(JSON.stringify(payload));
+};
+
 var getSeminars = function(apiUrl, cb) {
   var self = this;
   var xhr = new XMLHttpRequest();    
@@ -71,5 +117,8 @@ var authenticate = function(apiUrl, token, cb) {
 module.exports = {
   loginRequest: loginRequest,
   authenticate: authenticate,
-  getSeminars: getSeminars
+  getSeminars: getSeminars,
+  newAttendance: newAttendance,
+  putAttendance: putAttendance,
+  apiUrl: apiUrl
 }

@@ -8,7 +8,7 @@ var config = {
     extensions: ['', '.js', '.json']
   },
   entry:
-    './src/App.js', 
+    './src/app.js', 
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',

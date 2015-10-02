@@ -1,5 +1,4 @@
 var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin')  
 
 var config = {
   devtool: 'source-map',
@@ -34,13 +33,6 @@ var config = {
       { test: /\.json$/, loader: "json-loader" }    
     ]
   },
-  plugins: [new HtmlWebpackPlugin({
-    title: 'No Borders Iceland - Flóttafólk til Íslands', 
-    jumbotron: 'Flóttafólk til Íslands', 
-    footer: 'No Borders Iceland', 
-    template: './src/index.html', // Load a custom template 
-    inject: 'body' // Inject all scripts into the body     
-  })]
 
 };
 

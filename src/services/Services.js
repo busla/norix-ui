@@ -4,9 +4,10 @@ var authHeader = {
 };
 
 var apiUrl = "http://norix-api.projects.nonni.cc";
+//var apiUrl = "http://localhost:1337";
 
 var newAttendance = function(apiUrl, payload, cb) {
-    console.log(apiUrl);
+    //console.log(apiUrl);
     var self = this;
     var xhr = new XMLHttpRequest();    
     xhr.open('post', apiUrl, true);
@@ -96,11 +97,11 @@ var authenticate = function(apiUrl, token, cb) {
 
   var xhr = new XMLHttpRequest();    
   xhr.open('get', apiUrl, true);
-  console.log(payload);
+  //console.log(payload);
   xhr.setRequestHeader(payload.header, payload.value);
   xhr.onload = function() {
     self.data = JSON.parse(xhr.responseText);
-    console.log('Services: ', self.data);
+    //console.log('Services: ', self.data);
   
     if ('err' in self.data) {              
       cb(self.data.err, null);    

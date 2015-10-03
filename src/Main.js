@@ -43,7 +43,7 @@ var Main = React.createClass({
         console.log(err)        
       }
       else {
-        console.log('Vistaði mætingu: ', data);
+        //console.log('Vistaði mætingu: ', data);
         this.getSeminars(attendance.id)
       }
       

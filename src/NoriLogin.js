@@ -68,7 +68,7 @@ var NoriLogin = React.createClass({
       }
 
       else {
-        console.log(data)
+        //console.log(data)
         localStorage.token = data.token;
         localStorage.username = data.username;
         this.setState({ isAuthenticated: true, loading: false }); 
@@ -96,7 +96,7 @@ var NoriLogin = React.createClass({
       
     }.bind(this));
     
-    console.log(this.state.loading);
+    //console.log(this.state.loading);
   },    
 
   /*

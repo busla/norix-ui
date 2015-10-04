@@ -30,7 +30,9 @@ var SeminarItem = React.createClass({
           case "desktop":
             return (
               <li className={this.props.isCurrent ? 'active' : null} role="presentation">
-                <a href={this.props.seminar.seminar_id} onClick={this.handleClick}>{name}</a>
+                <a href={this.props.seminar.seminar_id} onClick={this.handleClick}>{name}  <span className="badge">
+                    {this.props.seminar.players.length}
+                  </span></a>
               </li>                
             );           
             break;

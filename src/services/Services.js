@@ -11,7 +11,8 @@ var newAttendance = function(apiUrl, payload, cb) {
     var self = this;
     var xhr = new XMLHttpRequest();    
     xhr.open('post', apiUrl, true);
-    xhr.setRequestHeader(authHeader.header, authHeader.value);
+
+    xhr.setRequestHeader('Authorization', 'Bearer '+localStorage.token);
 
     xhr.onload = function() {
       self.data = JSON.parse(xhr.responseText);    
@@ -33,7 +34,7 @@ var putAttendance = function(apiUrl, payload, cb) {
     var self = this;
     var xhr = new XMLHttpRequest();    
     xhr.open('put', apiUrl, true);
-    xhr.setRequestHeader(authHeader.header, authHeader.value);
+    xhr.setRequestHeader('Authorization', 'Bearer '+localStorage.token);
 
     xhr.onload = function() {
       self.data = JSON.parse(xhr.responseText);    
@@ -54,7 +55,7 @@ var getSeminars = function(apiUrl, cb) {
   var self = this;
   var xhr = new XMLHttpRequest();    
   xhr.open('get', apiUrl, true);
-  xhr.setRequestHeader(authHeader.header, authHeader.value);
+  xhr.setRequestHeader('Authorization', 'Bearer '+localStorage.token);
   xhr.onload = function() {
     self.data = JSON.parse(xhr.responseText);    
     
@@ -83,7 +84,7 @@ var loginRequest = function (loginUrl, apiUrl, payload, cb) {
         cb(self.data.err, null);    
         return;
       }
-      
+
       cb(null, self.data);
       
     }.bind(this);
@@ -98,7 +99,7 @@ var authenticate = function(apiUrl, token, cb) {
   var xhr = new XMLHttpRequest();    
   xhr.open('get', apiUrl, true);
   //console.log(payload);
-  xhr.setRequestHeader(payload.header, payload.value);
+  xhr.setRequestHeader('Authorization', 'Bearer '+localStorage.token);
   xhr.onload = function() {
     self.data = JSON.parse(xhr.responseText);
     //console.log('Services: ', self.data);

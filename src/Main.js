@@ -253,6 +253,7 @@ var Main = React.createClass({
     else {
       return (
         <NoriLoginForm logIn={this.logIn}/>
+               
       );
     }
     

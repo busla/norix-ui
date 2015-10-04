@@ -27,6 +27,7 @@ var NoriLoginForm = React.createClass({
     return {
       isAuthenticated: (localStorage.token ? true:false),
       loading: false,
+      disclaimer: false,
       data: []
     }    
   },
@@ -43,17 +44,23 @@ var NoriLoginForm = React.createClass({
     };
 
     this.props.logIn(loginUrl, apiUrl, payload);
+    this.setState({loading: false});
   },
   
-
-
+  /*
+  componentDidMount: function () {
+    this.setState({disclaimer: false})
+  },
+  */
   /*
   componentWillMount: function() {
     React.unmountComponentAtNode(document.getElementById('main'));
   },
   */
   
-
+  handleChecked: function () {
+    this.setState({disclaimer: !this.state.disclaimer})
+  },
 
   render: function() {   
     
@@ -137,14 +144,13 @@ var NoriLoginForm = React.createClass({
     */
     
     var loginForm = (
-      <div className="container">
 
         <form className="form-signin">
-          <h2 className="form-signin-heading">Norix innskráning</h2>
+          <h2 className="form-signin-heading text-center">NORIX</h2>
           <Input className="form-control" ref="club" type='text' placeholder='félag' required="" autofocus="" />
           <Input className="form-control" ref="user" type='text' placeholder='notandanafn' required=""/>
           <Input ref="password" type='password' placeholder='lykilorð' required=""/>
-
+          <Input type="checkbox" onChange={this.handleChecked} label="NORIX kladdakerfið er ekki tengt Greiðslumiðlun (eiganda Nora) með neinum hætti. Ég samþykki að öll gögn sem ég hef aðgang að í Nora (ásamt notandanafni og lykilorði) verði einnig geymd í gagnagrunn NORIX. Öll lykilorð eru dulkóðuð í gagnagrunn Norix." />
           <Button 
             onClick={this.logIn} 
             bsStyle='primary'
@@ -152,19 +158,25 @@ var NoriLoginForm = React.createClass({
             bsSize='large'
             block
             type="submit"
-            disabled={this.state.loading ? true:false}>
+            disabled={this.state.disclaimer ? false:true}>
             <Glyphicon glyph={this.state.loading ? "glyphicon glyphicon-refresh glyphicon-refresh-animate":"log-in"}/> Innskrá
           </Button>
         </form>
 
-      </div> 
+      
     );
 
     if (!this.state.isAuthenticated) {
       return (
-        <div>
-          {loginForm}
+        <div className="container">
+          <Row>
+            <Col sm={4} smOffset={4} xs={12}>          
+              {loginForm}
+            </Col>
+          </Row>
         </div>
+
+
       );              
     }
 

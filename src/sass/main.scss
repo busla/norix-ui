@@ -2,7 +2,16 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
+* {
+    -webkit-font-smoothing: antialiased;
+}​
+.bootstrap-datetimepicker-widget {
+ -webkit-font-smoothing: antialiased;    
+}
 
+.adjust {
+      background-color: black !important;
+}
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;

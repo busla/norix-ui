@@ -188,63 +188,65 @@ var Main = React.createClass({
       }
       
       return(
-        <div className="container">                  
-          <Row>
-            <Col 
-              xs={12} 
-              md={12}
-              className="text-center">
-                <Button 
-                  bsStyle="primary" 
-                  className="navbar-btn">
-                    <Glyphicon glyph="user"/> {localStorage.username}
-                </Button>            
-                <Button 
-                  disabled={this.state.loading ? true:false}
-                  bsStyle="success" 
-                  className="navbar-btn"              
-                  onClick={this.sync}>
-                    <Glyphicon glyph={this.state.loading ? "glyphicon glyphicon-refresh glyphicon-refresh-animate":"refresh"}/> Uppfæra
-                </Button>             
-                <Button 
-                  bsStyle="danger" 
-                  className="navbar-btn"              
-                  onClick={this.logout}>
-                    <Glyphicon glyph="log-out"/> Hætta
-                </Button>
-            </Col>          
-          </Row>
-          <Row>
-            <Col xs={12} md={9}>            
-              <Row>
-                <Col xs={12}>
-                  <SeminarNavigation
-                    currentSeminar={this.state.currentSeminar}
-                    seminarList={this.state.data}
-                    changeSeminar={this.changeSeminar} />
-                </Col>
-              </Row>                      
-              <Row>
-                <Col xs={12}>
-                  <Attendance 
-                    changeDate={this.changeDate}                    
-                    handleAdd={this.handleAdd} 
-                    attendance={attendance}                 
-                    seminar={this.state.data[this.state.currentSeminar]}
-                    handlePlayerAttended={this.handlePlayerAttended} 
-                    currentAttendance={this.state.currentAttendance}/>
-                </Col>
-              </Row>                   
-            </Col>
+        <div>  
+          <Navbar 
+          brand="NORIX">
+                                   
+              <ButtonToolbar className="pull-right">
+                    <Button 
+                      bsStyle="primary" 
+                      className="navbar-btn">
+                        <Glyphicon glyph="user"/> {localStorage.username}
+                    </Button>            
+                    <Button 
+                      disabled={this.state.loading ? true:false}
+                      bsStyle="success" 
+                      className="navbar-btn"              
+                      onClick={this.sync}>
+                        <Glyphicon glyph={this.state.loading ? "glyphicon glyphicon-refresh glyphicon-refresh-animate":"refresh"}/> Uppfæra
+                    </Button>             
+                    <Button 
+                      bsStyle="danger" 
+                      className="navbar-btn"              
+                      onClick={this.logout}>
+                        <Glyphicon glyph="log-out"/> Hætta
+                    </Button>
+              </ButtonToolbar>
             
-            <Col xs={12} md={3} className="attendance attendance-list-container">              
-              <AttendanceMenu 
-                attendance={this.state.data[this.state.currentSeminar].attendance}
-                handleChangeAttendance={this.handleChangeAttendance} />
-            </Col>
-            
-          </Row>
-        </div>  
+          </Navbar>
+          <div className="container">
+            <Row>
+              <Col xs={12} md={9}>            
+                <Row>
+                  <Col xs={12}>
+                    <SeminarNavigation
+                      currentSeminar={this.state.currentSeminar}
+                      seminarList={this.state.data}
+                      changeSeminar={this.changeSeminar} />
+                  </Col>
+                </Row>                      
+                <Row>
+                  <Col xs={12}>
+                    <Attendance 
+                      changeDate={this.changeDate}                    
+                      handleAdd={this.handleAdd} 
+                      attendance={attendance}                 
+                      seminar={this.state.data[this.state.currentSeminar]}
+                      handlePlayerAttended={this.handlePlayerAttended} 
+                      currentAttendance={this.state.currentAttendance}/>
+                  </Col>
+                </Row>                   
+              </Col>
+              
+              <Col xs={12} md={3} className="attendance attendance-list-container">              
+                <AttendanceMenu 
+                  attendance={this.state.data[this.state.currentSeminar].attendance}
+                  handleChangeAttendance={this.handleChangeAttendance} />
+              </Col>
+              
+            </Row>
+          </div>  
+        </div>
       );
     
     }

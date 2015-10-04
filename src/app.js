@@ -6,5 +6,5 @@ var _ = require('underscore');
 var NoriLogin = require('./NoriLogin');
 var Main = require('./Main');
 
-React.render(<NoriLogin />, document.getElementById('navbar') );
+React.render(<Main />, document.getElementById('main') );
 //React.render(<Example />, document.getElementById('swiper') );

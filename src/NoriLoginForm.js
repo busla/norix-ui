@@ -2,8 +2,10 @@
 
 var React = require('react');
 var Main = require('./Main');
+//var NoriNavbar = require('./NoriNavbar');
 var SeminarService = require('./services/Services');
-var NoriLoginForm = require('./NoriLoginForm');
+var MediaQuery = require('react-responsive');
+
 var ReactBootstrap = require('react-bootstrap'),
     Nav = ReactBootstrap.Nav,
     NavItem = ReactBootstrap.NavItem,
@@ -19,38 +21,17 @@ var ReactBootstrap = require('react-bootstrap'),
     Row = ReactBootstrap.Row;
 
 
-var NoriLogin = React.createClass({
-  /*
-  statics: {
-    authenticate: function(apiUrl, token, cb) { 
+var NoriLoginForm = React.createClass({
 
-      var payload = {header: 'Authorization', value: 'Bearer '+token}    
-
-      var xhr = new XMLHttpRequest();    
-      xhr.open('get', apiUrl, true);
-      console.log(payload);
-      xhr.setRequestHeader(payload.header, payload.value);
-      xhr.onload = function() {
-        var data = JSON.parse(xhr.responseText);
-        console.log('DATA: ', data);
-        
-        cb(data);
-
-      }.bind(this);
-
-      xhr.send();    
-    },
-
-  },
-  */
   getInitialState: function () {
     return {
       isAuthenticated: (localStorage.token ? true:false),
-      loading: false
+      loading: false,
+      data: []
     }    
   },
 
-  logIn: function(e) {
+  logIn: function (e) {
     e.preventDefault();
     this.setState({loading: true});  
     var loginUrl = SeminarService.apiUrl+'/login';
@@ -60,44 +41,11 @@ var NoriLogin = React.createClass({
         password: this.refs.password.getValue(),
         club: this.refs.club.getValue()
     };
-   
-    SeminarService.loginRequest(loginUrl, apiUrl, payload, function(err, data) {
-      if (err) {
-        console.log(err)
-        this.setState({loading: false });
-      }
 
-      else {
-        //console.log(data)
-        localStorage.token = data.token;
-        localStorage.username = data.username;
-        this.setState({ isAuthenticated: true, loading: false }); 
-        React.render(<Main data={data.data} url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
-      }
-      
-    }.bind(this));
-    
+    this.props.logIn(loginUrl, apiUrl, payload);
   },
   
-  sync: function(e) {    
-    e.preventDefault();
-    this.setState({loading: true});
-    console.log(localStorage.token);
-    SeminarService.authenticate(SeminarService.apiUrl+'/sync', localStorage.token, function(err, results) {      
-      if (err) {
-        console.log(err);
-        this.logout();
-      }
-      else {
-        this.setState({isAuthenticated: true});
-        React.render(<Main url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
-        this.setState({loading: false});
-      }
-      
-    }.bind(this));
-    
-    //console.log(this.state.loading);
-  },    
+
 
   /*
   componentWillMount: function() {
@@ -105,31 +53,7 @@ var NoriLogin = React.createClass({
   },
   */
   
-  
-  componentDidMount: function() {
-    //this.getSeminars();   
-      
-    SeminarService.authenticate(SeminarService.apiUrl+'/seminar', localStorage.token, function(err, data) {            
 
-      if (err) {
-        console.log(err);
-        this.logout();
-      }
-      else {
-        React.render(<Main data={data.data} url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
-      }
-      
-    }.bind(this));
-  
-      
-  },
-  
-  logout: function() {
-    delete localStorage.token;
-    delete localStorage.username;
-    this.setState({ isAuthenticated: false });
-    React.unmountComponentAtNode(document.getElementById('main'));
-  },
 
   render: function() {   
     
@@ -185,24 +109,71 @@ var NoriLogin = React.createClass({
           </form>
         
       );
+      var containerMarkup = (
+        <div className="container">
+
+          <form className="form-signin">
+            <h2 className="form-signin-heading">Norix innskráning</h2>
+            <Input className="form-control" ref="club" type='text' placeholder='félag' required="" autofocus="" />
+            <Input className="form-control" ref="user" type='text' placeholder='notandanafn' required=""/>
+            <Input ref="password" type='password' placeholder='lykilorð' required=""/>
+
+            <Button 
+              onClick={this.logIn} 
+              bsStyle='primary'
+              className=''
+              bsSize='large'
+              block
+              type="submit"
+              disabled={this.state.loading ? true:false}>
+              <Glyphicon glyph={this.state.loading ? "glyphicon glyphicon-refresh glyphicon-refresh-animate":"log-in"}/> Innskrá
+            </Button>
+          </form>
+
+        </div> 
+      );      
+       
     };
     */
-    if (this.state.isAuthenticated) {
+    
+    var loginForm = (
+      <div className="container">
+
+        <form className="form-signin">
+          <h2 className="form-signin-heading">Norix innskráning</h2>
+          <Input className="form-control" ref="club" type='text' placeholder='félag' required="" autofocus="" />
+          <Input className="form-control" ref="user" type='text' placeholder='notandanafn' required=""/>
+          <Input ref="password" type='password' placeholder='lykilorð' required=""/>
+
+          <Button 
+            onClick={this.logIn} 
+            bsStyle='primary'
+            className=''
+            bsSize='large'
+            block
+            type="submit"
+            disabled={this.state.loading ? true:false}>
+            <Glyphicon glyph={this.state.loading ? "glyphicon glyphicon-refresh glyphicon-refresh-animate":"log-in"}/> Innskrá
+          </Button>
+        </form>
+
+      </div> 
+    );
+
+    if (!this.state.isAuthenticated) {
       return (
-        <Navbar 
-        brand="NORIX">
-          <Nav right>
-            {navMarkup}
-          </Nav>
-        </Navbar>      
-      )
+        <div>
+          {loginForm}
+        </div>
+      );              
     }
+
     else {
       return (
-        <NoriLoginForm />
+        <Main data={this.state.data} />        
       );
     }
   }
 });
 
-module.exports = NoriLogin
+module.exports = NoriLoginForm

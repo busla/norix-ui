@@ -46,7 +46,7 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
     margin-top: 10px;
 }
 
-.navbar-form > div, button {
+.navbar-form > div, .navbar-form > button, .navbar-btn {
     margin-left: 5px;
 }
 
@@ -130,9 +130,9 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
     }
 
     .glyphicon-chevron-left {
-        left: 8px
+        left: 35px
     }
     .glyphicon-chevron-right {
-        right: 8px
+        right: 35px
     }    
 }

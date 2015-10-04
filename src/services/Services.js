@@ -3,8 +3,8 @@ var authHeader = {
   value: 'Bearer '+localStorage.token
 };
 
-var apiUrl = "http://norix-api.projects.nonni.cc";
-//var apiUrl = "http://localhost:1337";
+//var apiUrl = "http://norix-api.projects.nonni.cc";
+var apiUrl = "http://localhost:1337";
 
 var newAttendance = function(apiUrl, payload, cb) {
     //console.log(apiUrl);

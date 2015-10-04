@@ -3,15 +3,34 @@
 var React = require('react');
 
 var PlayerDetail = React.createClass({
-
+  /*
+  getInitialState: function () {
+    return {
+      attended: this.props.attended
+    }
+  },
+*/
   handlePlayerAttended: function(ssn) {
-
+    //this.setState({attended: !this.state.attended})
     this.props.handlePlayerAttended(ssn);
 
   },
 
-  render: function() {    
-    //console.log('playerDetail: ', this.props.attended);
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return this.props.attended !== nextProps.attended;
+  },
+  
+  /*
+
+
+  componentWillReceiveProps: function (nextProps) {
+    this.setState({attended: nextProps.attended})
+  },
+  */
+
+  render: function() { 
+    
+    //console.log('playerDetail: ', this.state.attended);
     return (
         
       <tr>

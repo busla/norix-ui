@@ -21,7 +21,7 @@ var SeminarItem = React.createClass({
                 type="button" 
                 className="btn btn-primary">
                   
-                  {name}    <span className="badge">
+                  {name.substring(0,15)}    <span className="badge">
                     {this.props.seminar.players.length}
                   </span>
               </a>          

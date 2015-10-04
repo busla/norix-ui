@@ -36,6 +36,12 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
     margin-bottom: 100px !important;
 }
 
+.navbar-header {
+    @media screen and (max-width: 320px) {
+        display: none;
+      }
+}
+
 .row {
     margin-top: 10px;
 }

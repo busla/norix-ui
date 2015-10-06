@@ -64,7 +64,7 @@ var PlayerDetail = React.createClass({
 
   render: function() { 
     
-    console.log('playerDetail: ', this.props.attended);
+    
     return (
         
       <tr>

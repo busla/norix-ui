@@ -39,7 +39,7 @@ var Main = React.createClass({
   sync: function(e) {    
     e.preventDefault();
     this.setState({loading: true});
-    console.log(localStorage.token);
+    
     SeminarService.authenticate(SeminarService.apiUrl+'/sync', localStorage.token, function(err, results) {      
       if (err) {
         console.log(err);

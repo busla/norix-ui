@@ -3,34 +3,68 @@
 var React = require('react');
 
 var PlayerDetail = React.createClass({
-  /*
+  
   getInitialState: function () {
     return {
       attended: this.props.attended
     }
   },
-*/
-  handlePlayerAttended: function(ssn) {
-    //this.setState({attended: !this.state.attended})
-    this.props.handlePlayerAttended(ssn);
+  
+  handlePlayerAttended: function(e) {
+    this.setState({attended: React.findDOMNode(this.refs.playerCheckbox).checked})
+    //console.log(React.findDOMNode(this.refs.playerCheckbox).checked);
+    //console.log(e);
+    this.props.handlePlayerAttended(e);
 
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return this.props.attended !== nextProps.attended;
   },
   
-  /*
-
-
   componentWillReceiveProps: function (nextProps) {
-    this.setState({attended: nextProps.attended})
+    this.setState({attended: nextProps.attended});
+    //React.findDOMNode(this.refs.playerCheckbox).checked)
+    //console.log('nextProps: ', nextProps.attended);
+    /*
+    if (this.props.attendance) {
+      if (this.props.attendance.id == nextProps.attendance.id) {
+      
+        if (React.findDOMNode(this.refs.playerCheckbox).checked !==  this.state.attended) {
+          this.setState({attended: nextProps.attended})
+        }        
+      }
+    }
+    else {
+      this.setState({attended: this.props.attended});
+    }
+    */
+  },
+  /*
+  shouldComponentUpdate: function(nextProps, nextState) {
+    //console.log('(nextProps.attendance == this.props.attendance): ', (nextProps.attendance == this.props.attendance))
+    if (this.props.attendance) {
+      if (nextProps.attendance.id == this.props.attendance.id) {
+        return this.state.attended !== React.findDOMNode(this.refs.playerCheckbox).checked;  
+      }
+      else {
+        return true;  
+      }
+
+    }
+    else {
+      return true;  
+    }
   },
   */
+  
+  /*
+  componentDidUpdate: function () {
+    //this.setState({attended: this.props.attended})
+    console.log('WAAAAAAAAAT')
+  },
+  */
+  
 
   render: function() { 
     
-    //console.log('playerDetail: ', this.state.attended);
+    console.log('playerDetail: ', this.props.attended);
     return (
         
       <tr>
@@ -39,7 +73,8 @@ var PlayerDetail = React.createClass({
             <input 
               type="checkbox"
               disabled={this.props.attendance ? false:true}
-              checked={this.props.attended}
+              ref="playerCheckbox"
+              checked={this.state.attended}
               value="value"
               onChange={this.handlePlayerAttended} />
           </label>

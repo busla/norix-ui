@@ -3,8 +3,10 @@ var authHeader = {
   value: 'Bearer '+localStorage.token
 };
 
-var apiUrl = "http://norix-api.projects.nonni.cc";
-//var apiUrl = "http://localhost:1337";
+var options = {limit: 3, skip: 0};
+
+//var apiUrl = "http://norix-api.projects.nonni.cc";
+var apiUrl = "http://localhost:1337";
 
 var newAttendance = function(apiUrl, payload, cb) {
     //console.log(apiUrl);
@@ -21,7 +23,7 @@ var newAttendance = function(apiUrl, payload, cb) {
         cb(self.data.err, null);    
         return;
       }
-      
+      console.log(self.data);
       cb(null, self.data);
       
     }.bind(this);
@@ -52,9 +54,11 @@ var putAttendance = function(apiUrl, payload, cb) {
 };
 
 var getSeminars = function(apiUrl, cb) {
+  var params = ('?limit='+options.limit+'&skip='+options.skip);
+
   var self = this;
   var xhr = new XMLHttpRequest();    
-  xhr.open('get', apiUrl, true);
+  xhr.open('get', apiUrl+params, true);
   xhr.setRequestHeader('Authorization', 'Bearer '+localStorage.token);
   xhr.onload = function() {
     self.data = JSON.parse(xhr.responseText);    
@@ -73,31 +77,33 @@ var getSeminars = function(apiUrl, cb) {
 };
 
 var loginRequest = function (loginUrl, apiUrl, payload, cb) { 
-    var self = this;
-    var xhr = new XMLHttpRequest();    
-    xhr.open('post', loginUrl, true);
+  var params = ('?limit='+options.limit+'&skip='+options.skip);
+  var self = this;
+  var xhr = new XMLHttpRequest();    
+  xhr.open('post', loginUrl+params, true);
+  
+  xhr.onload = function() {
+    self.data = JSON.parse(xhr.responseText);    
     
-    xhr.onload = function() {
-      self.data = JSON.parse(xhr.responseText);    
-      
-      if ('err' in self.data) {              
-        cb(self.data.err, null);    
-        return;
-      }
+    if ('err' in self.data) {              
+      cb(self.data.err, null);    
+      return;
+    }
 
-      cb(null, self.data);
-      
-    }.bind(this);
+    cb(null, self.data);
+    
+  }.bind(this);
 
-    xhr.send(JSON.stringify(payload));      
+  xhr.send(JSON.stringify(payload));      
 };
 
 var authenticate = function(apiUrl, token, cb) { 
+  var params = ('?limit='+options.limit+'&skip='+options.skip);
   var self = this;
   var payload = {header: 'Authorization', value: 'Bearer '+token}    
 
   var xhr = new XMLHttpRequest();    
-  xhr.open('get', apiUrl, true);
+  xhr.open('get', apiUrl+params, true);
   //console.log(payload);
   xhr.setRequestHeader('Authorization', 'Bearer '+localStorage.token);
   xhr.onload = function() {

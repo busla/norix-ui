@@ -60,8 +60,7 @@ var Main = React.createClass({
   logout: function() {
     delete localStorage.token;
     delete localStorage.username;
-    this.setState({ isAuthenticated: false });
-    //React.unmountComponentAtNode(document.getElementById('main'));
+    this.setState({ isAuthenticated: false });    
   },
 
   logIn: function(loginUrl, apiUrl, payload) {
@@ -100,33 +99,35 @@ var Main = React.createClass({
     }.bind(this));  
   },
 
+
   getSeminars: function(currentAttendance) {    
-      SeminarService.getSeminars(SeminarService.apiUrl+'/seminar', function(err, data) {     
-        //console.log('getSeminars: ', data); 
-        if (err) {
-          console.log(err);
-          //this.logout();
-        }
-        else {
-          if (this.isMounted()) {
 
-            //console.log('data.data: ',  data.data);            
-            //React.render(<Main data={data.data} getSeminars={this.getSeminars} url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
-            
-            if (currentAttendance) {
-              //console.log('currentAttendance: ', currentAttendance);
-              this.setState({data: data.data, currentAttendance: currentAttendance});
-              return;
-            }
+    SeminarService.getSeminars(SeminarService.apiUrl+'/seminar', function(err, data) {     
+      //console.log('getSeminars: ', data); 
+      if (err) {
+        console.log(err);
+        //this.logout();
+      }
+      else {
+        if (this.isMounted()) {
 
-            this.setState({ data: data.data});
-            
-            
+          //console.log('data.data: ',  data.data);            
+          //React.render(<Main data={data.data} getSeminars={this.getSeminars} url={SeminarService.apiUrl+'/seminar'} />, document.getElementById('main') );
+          
+          if (currentAttendance) {
+            //console.log('currentAttendance: ', currentAttendance);
+            this.setState({data: data.data, currentAttendance: currentAttendance});
+            return;
           }
+
+          this.setState({ data: data.data});
+          
+          
         }
-        
-      }.bind(this));
-    },  
+      }
+      
+    }.bind(this));
+  },  
   
   componentDidMount: function() { 
     SeminarService.authenticate(SeminarService.apiUrl+'/seminar', localStorage.token, function(err, data) {            
@@ -240,7 +241,7 @@ var Main = React.createClass({
               
               <Col xs={12} md={3} className="attendance attendance-list-container">              
                 <AttendanceMenu 
-                  attendance={this.state.data[this.state.currentSeminar].attendance}
+                  attendance={this.state.data[this.state.currentSeminar].attendance}                  
                   handleChangeAttendance={this.handleChangeAttendance} />
               </Col>
               

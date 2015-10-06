@@ -19,7 +19,9 @@ var AttendanceMenuItem = React.createClass({
         <td>                                      
           <a href={this.props.attendance.id} onClick={this.handleChangeAttendance}>{niceDate}</a>
         </td>
-      </tr>            
+      </tr>   
+
+      
              
     );
   }    

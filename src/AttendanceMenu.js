@@ -31,7 +31,7 @@ var AttendanceMenu = React.createClass({
           <tbody>
             {rows}
           </tbody>
-        </table>                          
+        </table>
       </div>
 
     );

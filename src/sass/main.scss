@@ -5,9 +5,6 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 * {
     -webkit-font-smoothing: antialiased;
 }​
-.bootstrap-datetimepicker-widget {
- -webkit-font-smoothing: antialiased;    
-}
 
 .adjust {
       background-color: black !important;
@@ -83,11 +80,11 @@ $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
     *zoom:1;              /* for IE7*/
 
 }
-
+/*
 .nav-tabs, .nav-pills {
     text-align:center;
 }
-
+*/
 .btn-save-attendance {
     width: 90%;
 }
